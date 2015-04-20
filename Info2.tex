@@ -1,0 +1,124 @@
+\documentclass[a4paper, 20pt, openany]{book}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{enumitem}
+\usepackage{a4wide}
+\usepackage{geometry}
+\usepackage[automark]{scrpage2}
+\pagestyle{scrheadings}
+\usepackage{amssymb}
+\usepackage{ulem}
+\usepackage[doublespacing]{setspace}
+
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries}
+\clearscrheadfoot
+\ohead{Informatik II Skript - Steffen Lindner}
+\cfoot{\pagemark}
+\geometry{a4paper,left=10mm,right=10mm, top=10mm, bottom=2cm} 
+\parindent0pt
+
+\author{Steffen Lindner}
+\title{\vspace{-2cm}Informatik II Skript}
+\date{\today{}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\chapter{Einführung - 14.04.15}\uline{Scheme}: Ausdrücke, Auswertung und Abstraktion 
+
+\uline{Dr.Racket}: Definitionsfenster (oberer Bereich), Interaktionsfenster (unterer Bereich) 
+
+Die Anwendung von Funktionen wird in Scheme \uline{ausschließlich} in \uline{Präfixnotation} durchgeführt.
+
+\paragraph{Beispiele}
+\begin{flushleft}
+	\begin{tabular}{c|c}
+		Mathematik & Scheme \\
+		44-2 & (- 44 2) \\
+		f(x,y) & (f x y) \\
+		$\sqrt{81}$& (sqrt 81) \\
+		9² & (expt 9 2) \\
+		3! & (! 3)  {}
+	\end{tabular}
+\end{flushleft}
+
+Allgemein: ($<function> <arg1> <arg2> ...$)
+
+(+ 40 2) und (odd? 42) sind Beispiele für \uline{Ausdrücke}, die bei \uline{Auswertung} einen Wert liefern. (Notation: $\rightsquigarrow$)
+
+(+ 40 2) $\rightsquigarrow$ 42 ($\rightsquigarrow$ = Auswertng / Reduktion / Evalutation)
+
+(odd? 42) $\rightsquigarrow$ \#f
+
+Interaktionsfenster: Read $\rightarrow$ Eval $\rightarrow$ Print $\rightarrow$ Read ... (Read-Eval-Print-Loop aka. REPL)
+
+\uline{Literale} stehen für einen konstanten Wert (auch konstante) und sind nicht weiter reduzierbar.
+
+Literal: 
+
+\#t, \#f (true, false, Wahrheitswerte) (boolean) \\
+"abc", "x", " " (Zeichenkette) (String) \\
+0 1904 42 -2 (ganze Zahlen) (Integer) \\
+0.42 3.1415 (Fließkommazahl) (Reel) \\
+1/2, 3/4 (rationale Zahl) (Rational) \\
+$\backslash\_('')\_/"$ (Bilder) (Image)
+
+\chapter{Ausdrücke, Defines, usw. - 16.04.2015}
+
+Auswertung \uline{zusammengesetzter Ausdrücke} in mehreren Schritten (steps), von "innen nach außen" bis keine Reduktion mehr möglich ist.
+
+\begin{center}
+(+ (+ 20 20) (+ 1 1)) $\rightsquigarrow$ (+ 40 (+ 1 1) $\rightsquigarrow$ (+ 40 2) $\rightsquigarrow$ 42
+\end{center}
+
+\uline{Achtung}: Scheme rundet bei Arithmetik mit Fließkommazahlen (interne Darstellung ist binär).
+
+Bsp.: Auswertung des zusammengesetzten Ausdrucks 0.7 + (1/2)/0.25 - 0.6/0.3
+
+Arithmetik mit rationalen Zahlen ist exakt.
+
+Ein Wert kann an einen \uline{Namen} (auch Identifier) gebunden werden , durch
+
+\begin{center}
+(define $<id>$ $<e>$) ($<id>$ Identifier, $<e>$ Expression)
+\end{center}
+
+Erlaubt konsistente Wiederverwendung und dient der Selbstdokumentation von Programmen.
+
+\uline{Achtung}: Dies ist eine sogenannte \uline{Spezifikation} und kein Ausdruck. Insbesodnere besitzt diese Spezialform \uline{keinen} Wert, sondern einen Effekt: Name $<id>$ wird an den Wert von $<e>$ gebunden.
+
+
+
+Namen können in Scheme fast beliebig gewählt werden, solange:
+
+\begin{enumerate}
+\item die Zeichen (kommt noch) nicht vorkommen
+\item der Name nicht einem numerischen Literal gleicht
+\item kein whitespace (Leerzeichen, Tabulatoren, Return) enthalten ist.
+\end{enumerate}
+
+Bsp.: euro $\rightarrow$ us$\$$
+
+\uline{Achtung}: Groß-/Kleinschreibung ist in Identifiern nicht relevant.
+
+Eine \uline{Lambda-Abstraktion} (auch: Funktion, Prozedur) erlaubt die Formulierung von Ausdrücken, die mittels \uline{Parametern} konkreten Werten abstrahieren:
+
+\begin{center}
+(lambda ($<p1> <p2> ...$) $<e>$), $<e>$ Rumpf
+\end{center}
+
+$<e>$ enthälft Vorkommen der Parameter $<p1>,<p2>$...
+
+(lambda ...) ist eine Spezialform. Wert der Lambda-Abstraktion ist $\#<procedure>$
+
+\uline{Anwendung} (auch: Applikation/Aufruf) der Lambda-Abstraktion führt zur Ersetzung der vorkommenden Parameter im Rumpf durch die angegebenen \uline{Argumente}: 
+
+(lambda (days) (* days (* 155 min-in-a-day))) $\rightsquigarrow$ (* 365 (* 155 min-in-a-day)) $\rightsquigarrow$ 81468000
+
+In Scheme leitet ein Semikolon einen \uline{Kommentar}, der bis zum Zeilenende reicht, ein und wird vom System bei der Auswertung ignoriert.
+
+Prozeduren sollten im Programm eine ein-bis zweizeiliger Kurzberschreibung direkt voran gestellt werden.
+
+\end{document}
