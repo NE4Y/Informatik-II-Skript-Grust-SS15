@@ -121,4 +121,63 @@ In Scheme leitet ein Semikolon einen \uline{Kommentar}, der bis zum Zeilenende r
 
 Prozeduren sollten im Programm eine ein-bis zweizeiliger Kurzberschreibung direkt voran gestellt werden.
 
+\chapter{Signaturen, Testfälle - 21.04.15}
+Eine \underline{Signatur} prüft, ob ein Name an einen Wert einer angegebenen Sorte (Typ) gebunden wird. Signaturverletzungen werden protokolliert.
+
+\begin{center}
+$(: \ <id>  \ <signatur>)$
+\end{center}
+
+Bereits eingebaute Signaturen:
+
+\begin{itemize}
+\item natural $\mathbb{N}$
+\item integer $\mathbb{Z}$
+\item rational $\mathbb{Q}$
+\item real $\mathbb{R}$
+\item number $\mathbb{C}$
+\item boolean
+\item string
+\item image
+\end{itemize}
+
+(: ...) ist eine Spezialform ohne Wert, aber Effekt: Signaturprüfung \\
+
+\underline{Prozedur-Signaturen} spezifizieren sowohl Signaturen für die Parameter p1, p2, ... , pn als auch den Ergebniswert der Prozedur:
+
+\begin{center}
+$(<signatur p_{1}> ... <signatur p_{n}> -> <signatur-ergebnis>)$
+\end{center}
+
+Prozedur-Signaturen werden \underline{bei jeder Anwendung} eine Prozedur auf Verletzung geprüft. \\
+
+
+\underline{Testfälle} dokumentieren das erwartete Ergebnis einer Prozedur für ausgewählte Argumente:
+
+\begin{center}
+$(check-expect <e_{1}> <e_{2}>)$
+\end{center}
+
+Werte Ausruck $<e_{1}>$ aus und teste, ob der erhaltene Wert der Erwarung (= der Wert von $<e_{2}>$) entspricht. \\
+
+Einer Prozedurdefinition sollten Testfälle direkt vorangestellt werden.
+
+Spezialform: Kein Wert, aber Effekt: Testverletzung protokollieren.\\
+
+\underline{Konstruktionsanleitung für Prozeduren}
+\begin{itemize}
+\item ; ... (1) Kurzbeschreibung (1-2 zeiliger Kommentar mit Bezug auf Parameter)
+\item (: ...) (2) Signatur
+\item (check-expect ...) (3) Testfälle
+\item (define (lambda (...) ...) (4) Prozedur + Rumpf
+\end{itemize}
+
+\underline{Top-Down-Entwurf} (Programmieren durch "Wunschdenken") 
+
+Bsp.: Zeichen Ziffernblatt (Stunden- und Minutenzeiger) zur Uhrzeit H:m auf einer analogen 24h-Uhr 
+\begin{itemize}
+\item Minutenzeiger legt 360°/60 pro Minute zurück (360/60 * m)
+\item Stundenzeiger legt 360°/12 pro Stunde zurück (360/12 * h + 360/12 * m/60)
+\end{itemize}
+
 \end{document}
