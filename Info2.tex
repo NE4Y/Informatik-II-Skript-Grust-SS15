@@ -180,4 +180,53 @@ Bsp.: Zeichen Ziffernblatt (Stunden- und Minutenzeiger) zur Uhrzeit H:m auf eine
 \item Stundenzeiger legt 360°/12 pro Stunde zurück (360/12 * h + 360/12 * m/60)
 \end{itemize}
 
+\chapter{Substitutionsmodell}
+\underline{Reduktionsregeln} für Scheme (Fallunterscheidug je nach Ausrucksart)
+
+Wiederhole, bis keine Reduktion mehr möglich:
+\begin{itemize}
+\item Literal (1, "abc", \#t, ...) [eval$_{lit}$]
+
+l $\rightsquigarrow$ l
+\item Identifier id (pi, clock-face, ...) [eval$_{id}$]
+
+id $\rightsquigarrow$ gebundener Wert
+\item Lambd-Abstraktion 
+
+(lambda () ) $\rightsquigarrow$ (lambda () ) [eval$_{\lambda}$]
+
+\item Applikation (f, e1, e2)
+ \begin{itemize}
+ \item (1) f, e1, e2 reduziere, erhalte f', e1', e2' 
+ \item (2)
+   \begin{itemize}
+   \item Operation f' auf e1', e2', ... falls f' primitive Operation (+, *, ...) [apply$_{prim}$]
+   \item Argumentenwert e1', e2', ... Rumpf von f' einsetzen, dann Rumpf reduzieren , falls f' Lambdaabstraktion [apply$_{\lambda}$]
+   \end{itemize}
+ \end{itemize}
+\end{itemize}
+
+\underline{Beispiel:} Applikation
+
+(+ 40 2)
+
+$\rightsquigarrow$ (\#$<$ procedure + $>$ 40 2) $\rightsquigarrow$ 42
+
+eval$_{lit}$ (+)
+
+eval$_{lit}$ (40)
+
+eval$_{lit}$ (2)
+
+
+(position-minute-hand 30)
+
+$\rightsquigarrow$ ((lambda (m) (* degrees-per-minute m)) 30)
+
+$\rightsquigarrow$ (* degrees-per-minute 30)
+
+$\rightsquigarrow$ (* degress-per-minute 30)
+
+$\rightsquigarrow$ (\#$<$procedure * $>$ 360/60 30)
+
 \end{document}
