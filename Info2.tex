@@ -180,7 +180,7 @@ Bsp.: Zeichen Ziffernblatt (Stunden- und Minutenzeiger) zur Uhrzeit H:m auf eine
 \item Stundenzeiger legt 360°/12 pro Stunde zurück (360/12 * h + 360/12 * m/60)
 \end{itemize}
 
-\chapter{Substitutionsmodell}
+\chapter{Substitutionsmodell, Fallunterscheidung - 23.04.15}
 \underline{Reduktionsregeln} für Scheme (Fallunterscheidug je nach Ausrucksart)
 
 Wiederhole, bis keine Reduktion mehr möglich:
@@ -216,7 +216,7 @@ eval$_{lit}$ (+)
 
 eval$_{lit}$ (40)
 
-eval$_{lit}$ (2)
+eval$_{lit}$ (2)\textsl{•}
 
 
 (position-minute-hand 30)
@@ -229,4 +229,38 @@ $\rightsquigarrow$ (* degress-per-minute 30)
 
 $\rightsquigarrow$ (\#$<$procedure * $>$ 360/60 30)
 
+Bezeichnen (lambda (x) (* x x )) und (lambda (r) (* r r)) die gleiche Prozedur? $\Rightarrow$ Ja!
+
+\underline{Achtung}: Das hat Einfluss auf das korrekte Einsetzen von Argumenten für Parameter! (s. apply$_{\lambda}$)
+
+Das \underline{bindenen Vorkommen} eines Identifiers x kann im Programmtext systematisch bestimmt werden: suche strik von "innen nach außen" bis zum ersten 
+
+\begin{itemize}
+\item (lambda (x) )
+\item (define x )
+\end{itemize}
+
+(Prinzip der \underline{lexikalischen Bindung})
+
+Übliche Notation in der Mathematik: \underline{Fallunterscheidung}
+
+$ maximum(x_{1}, x_{2})=\left\{\begin{array}{cl} x_{1}, & \mbox{falls } x_{1} \geq x_{2}\\ x_{2}, & \mbox{sonst} \end{array}\right. $
+
+\underline{Tests} auch (Prädikate) sind Funktionen, die einen Wert der Signatur boolean liefern. Typische primitive Tests:
+
+\begin{itemize}
+\item (: = (number number $\rightarrow$ boolean))
+\item (: $<$ (real real $\rightarrow$ boolean)), auch $>, \le, \geq$
+\item (: string=? (string string $\rightarrow$ boolean)), auch string$>$?, string$\le$?
+\item (: boolean? (boolean boolean $\rightarrow$ boolean))
+\item (: zero? (number $\rightarrow$ boolean))
+\item odd?, even?, positive?, negative?, ...
+\end{itemize}
+
+Binäre Fallunterscheidung: \underline{if}
+
+(if $<t_{1}> <e_{1}> <e_{2}>$) \\
+
+Mathematisch: 
+$ \left\{\begin{array}{cl} e_{1}, & \mbox{falls } t_{1}\\ e_{2}, & \mbox{sonst} \end{array}\right. $
 \end{document}
