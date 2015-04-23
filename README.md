@@ -1,3 +1,8 @@
-# Informatik-II-Skript-Grust-SS15
+<h2>Informatik II Skript Grust SS 15</h2>
 
-Informatik II Skript Grust SS 15. WIrd jeweils am Tag der Vorlesung geupdated
+<h3>Inhalt:</h3>
+<ul>
+  <li>Einführung - 14.04.15</li>
+  <li>Ausdrücke, Defines, usw - 16.04.15</li>
+  <li>Signaturen, Testfälle - 21.04.15</li>
+</ul>
