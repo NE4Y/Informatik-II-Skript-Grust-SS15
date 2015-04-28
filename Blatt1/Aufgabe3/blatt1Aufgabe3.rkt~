@@ -1,0 +1,16 @@
+;; Die ersten drei Zeilen dieser Datei wurden von DrRacket eingefügt. Sie enthalten Metadaten
+;; über die Sprachebene dieser Datei in einer Form, die DrRacket verarbeiten kann.
+#reader(lib "DMdA-beginner-reader.ss" "deinprogramm")((modname blatt1Aufgabe3) (read-case-sensitive #f) (teachpacks ((lib "image2.rkt" "teachpack" "deinprogramm"))) (deinprogramm-settings #(#f write repeating-decimal #f #t none explicit #f ((lib "image2.rkt" "teachpack" "deinprogramm")))))
+; Steffen Lindner, Tobias Feuerecker
+; Blatt 1
+; Aufgabe 2
+
+; Berechnet die zweidimensionale Fläche eines Würfels
+; mit der Kantenlänge k
+(: cube-area (real -> real))
+(check-expect (cube-area 2) 8)
+(check-expect (cube-area 3) 18)
+(define cube-area
+  (lambda (k)
+    (* 2 k k)))
+

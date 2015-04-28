@@ -263,4 +263,58 @@ Binäre Fallunterscheidung: \underline{if}
 
 Mathematisch: 
 $ \left\{\begin{array}{cl} e_{1}, & \mbox{falls } t_{1}\\ e_{2}, & \mbox{sonst} \end{array}\right. $
+
+\chapter{One-of Signatur - 28.04.15}
+Die Signatur \underline{one-of} lässt genau einen der aufgezählten n Werte zu: 
+\begin{center}
+	(one-of $<e_1> ... <e_n>$)
+\end{center}
+
+Reduktion von if: \\
+
+(if $t_{1} e_{1} e_{2}$) $ \rightsquigarrow$ 
+$ \left\{\begin{array}{cl} <e_{1}>, & \mbox{falls t1' = \#t ; e2 wird niemals ausgewertet} \\ <e_{2}>, & \mbox{sonst; e1 wird niemals ausgewertet} \end{array}\right. $ \\
+
+
+
+(1) Reduziere $t_{1}$, erhalte $t_{1}$ \\
+
+Spezialform Fallunterscheidung (conditional expression):
+\begin{center}
+(cond ($<t_1 > <e_1 >$) ... ($<t_n > <e_n >$) (else $<e_{n+1}>$)) (else optional)
+\end{center}
+
+Werte die Tests in der Reihenfolge t1,t2,...,tn aus. Sobald $t_i $ \# t ergibt werte Zweig $e_i $ aus. $e_i $ ist das Ergebnis der Fallunterscheidung. Wenn $t_n $ \# f liefert, dann liefere
+\begin{center}
+$ \left\{\begin{array}{cl} Fehlermeldung, & \mbox{"cond: alle Tests ergaben \#f", falls kein else-Zweig \ } \\ <e_{n+1}>, & \mbox{sonst} \end{array}\right. $
+\end{center}
+
+Reduktion von cond [eval$_{cond}$]
+
+\begin{center}
+	(cond ($<t1> <e1>) (<t2> <e2>) ...$) $\rightsquigarrow    \left\{\begin{array}{cl} <e_{1}>, & \mbox{falls t1' = \#f} \\ (cond (<t_{2}> <e_{2}> ) (...) ), & \mbox{sonst} \end{array}\right. $
+\end{center}
+
+Reduziere t1, erhalte t1'.
+
+(cond ) $\rightsquigarrow$ Fehlermeldung "Alle Tests..."
+
+(cond (else $<e_{n+1}>$)) $\rightsquigarrow$ $e_{n+1}$
+
+cond ist "systematischer Zucker" \\
+(auch: abgleitete Form) für eine verschachtelte Anwendung von 'if':
+
+(cond ($<t1> <e1>$) ($<t2> <e2>$) ... ))) entspricht (if $<t1> <e1> (if <t1> <e2> (if ...)$)
+
+Spezialformen 'and' und 'or':
+\begin{center}
+$(or <t1> <t2> ... <tn>)$ entspricht $(if <t1> \#t (or <t2> ...)$)
+
+(or) $\rightsquigarrow$ \#f
+\end{center}
+\begin{center}
+$(and <t1>...<tn> \rightsquigarrow (if <t1> (and <t2> ... <tn>) \#f$)
+
+(and) $\rightsquigarrow \# t$
+\end{center}
 \end{document}
