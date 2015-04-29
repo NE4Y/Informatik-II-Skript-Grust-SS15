@@ -6,5 +6,5 @@
   <li>Ausdrücke, Defines, usw - 16.04.15</li>
   <li>Signaturen, Testfälle - 21.04.15</li>
   <li>Substitutionsmodell, Fallunterscheidung - 23.04.15</li>
-  <li>One-of Signatur</li>
+  <li>One-of Signatur - 28.04.15</li>
 </ul>
