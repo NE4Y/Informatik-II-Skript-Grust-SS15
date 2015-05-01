@@ -1,4 +1,8 @@
 \documentclass[a4paper, 20pt, openany]{book}
+\usepackage{titlesec}
+\titleformat{\chapter}[display]   
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{5pt}{-50pt}{40pt}
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 \usepackage{enumitem}
@@ -9,6 +13,7 @@
 \usepackage{amssymb}
 \usepackage{ulem}
 \usepackage[doublespacing]{setspace}
+
 
 \usepackage{titlesec}
 \titleformat*{\section}{\large\bfseries}
@@ -120,6 +125,8 @@ $<e>$ enthälft Vorkommen der Parameter $<p1>,<p2>$...
 In Scheme leitet ein Semikolon einen \uline{Kommentar}, der bis zum Zeilenende reicht, ein und wird vom System bei der Auswertung ignoriert.
 
 Prozeduren sollten im Programm eine ein-bis zweizeiliger Kurzberschreibung direkt voran gestellt werden.
+
+
 
 \chapter{Signaturen, Testfälle - 21.04.15}
 Eine \underline{Signatur} prüft, ob ein Name an einen Wert einer angegebenen Sorte (Typ) gebunden wird. Signaturverletzungen werden protokolliert.
@@ -272,19 +279,19 @@ Die Signatur \underline{one-of} lässt genau einen der aufgezählten n Werte zu:
 
 Reduktion von if: \\
 
-(if $t_{1} e_{1} e_{2}$) $ \rightsquigarrow$ 
+(if $t_{1}\  e_{1}  \ e_{2}$) $ \rightsquigarrow$ 
 $ \left\{\begin{array}{cl} <e_{1}>, & \mbox{falls t1' = \#t ; e2 wird niemals ausgewertet} \\ <e_{2}>, & \mbox{sonst; e1 wird niemals ausgewertet} \end{array}\right. $ \\
 
 
 
-(1) Reduziere $t_{1}$, erhalte $t_{1}$ \\
+(1) Reduziere $t_{1}$, erhalte $t_{1}'$ \\
 
 Spezialform Fallunterscheidung (conditional expression):
 \begin{center}
 (cond ($<t_1 > <e_1 >$) ... ($<t_n > <e_n >$) (else $<e_{n+1}>$)) (else optional)
 \end{center}
 
-Werte die Tests in der Reihenfolge t1,t2,...,tn aus. Sobald $t_i $ \# t ergibt werte Zweig $e_i $ aus. $e_i $ ist das Ergebnis der Fallunterscheidung. Wenn $t_n $ \# f liefert, dann liefere
+Werte die Tests in der Reihenfolge $t_{1},t_{2},...,t_{n}$ aus. Sobald $t_i $ \# t ergibt werte Zweig $e_i $ aus. $e_i $ ist das Ergebnis der Fallunterscheidung. Wenn $t_n $ \# f liefert, dann liefere
 \begin{center}
 $ \left\{\begin{array}{cl} Fehlermeldung, & \mbox{"cond: alle Tests ergaben \#f", falls kein else-Zweig \ } \\ <e_{n+1}>, & \mbox{sonst} \end{array}\right. $
 \end{center}
@@ -292,10 +299,10 @@ $ \left\{\begin{array}{cl} Fehlermeldung, & \mbox{"cond: alle Tests ergaben \#f"
 Reduktion von cond [eval$_{cond}$]
 
 \begin{center}
-	(cond ($<t1> <e1>) (<t2> <e2>) ...$) $\rightsquigarrow    \left\{\begin{array}{cl} <e_{1}>, & \mbox{falls t1' = \#f} \\ (cond (<t_{2}> <e_{2}> ) (...) ), & \mbox{sonst} \end{array}\right. $
+	(cond ($<t_{1}> <e_{1}>) (<t_2> <e_2>) ...$) $\rightsquigarrow    \left\{\begin{array}{cl} <e_{1}>, & \mbox{falls t1' = \#f} \\ (cond (<t_{2}> <e_{2}> ) (...) ), & \mbox{sonst} \end{array}\right. $
 \end{center}
 
-Reduziere t1, erhalte t1'.
+Reduziere $t_1$, erhalte $t_1$'.
 
 (cond ) $\rightsquigarrow$ Fehlermeldung "Alle Tests..."
 
@@ -304,17 +311,173 @@ Reduziere t1, erhalte t1'.
 cond ist "systematischer Zucker" \\
 (auch: abgleitete Form) für eine verschachtelte Anwendung von 'if':
 
-(cond ($<t1> <e1>$) ($<t2> <e2>$) ... ))) entspricht (if $<t1> <e1> (if <t1> <e2> (if ...)$)
+(cond ($<t_1> <e_1>$) ($<t_1> <e_1>$) ... ))) entspricht (if $<t_1> <e_1> (if <t_1> <e_1> (if ...)$)
 
 Spezialformen 'and' und 'or':
 \begin{center}
-$(or <t1> <t2> ... <tn>)$ entspricht $(if <t1> \#t (or <t2> ...)$)
+$(or <t_!> <t_2> ... <t_n>)$ entspricht $(if <t_1> \#t (or <t_2> ...)$)
 
 (or) $\rightsquigarrow$ \#f
 \end{center}
 \begin{center}
-$(and <t1>...<tn> \rightsquigarrow (if <t1> (and <t2> ... <tn>) \#f$)
+$(and <t_1>...<t_n> \rightsquigarrow (if <t_1> (and <t_2> ... <t_n>) \#f$)
 
 (and) $\rightsquigarrow \# t$
 \end{center}
+
+\chapter{Zusammengesetzte Daten - 30.04.15}
+Ein Charakter \underline{besteht aus} drei \underline{Komponenten}.
+\begin{itemize}
+  \item Name des Charakters (name)
+  \item Handelt es sich um einen Jedi? (jedi?)
+  \item Stärke der Macht (force)
+\end{itemize}
+
+$\rightarrow$ \underline{Datendefinition} für zusammengesetzte Daten.
+
+Konkreter Charakter: \\
+
+\begin{tabular}{c|c}
+Name & "Luke Skywalker" \\ \hline
+jedi? & \#f \\ \hline
+force & 25 \\
+\end{tabular}\\
+
+; Ein Charakter (character) besteht aus \\
+; - Name (name)\\
+; - Jedi-Status (jedi?)\\
+; - Stärke der Macht (force)\\
+
+\begin{center}
+(define-records-procedures charakter
+
+make-character
+
+character?
+
+(character-name
+
+character-jedi
+
+character-force))
+\end{center}
+
+(make-character n j f) $\rightsquigarrow$ $<records>$ (konstruktion)
+
+(character-name $<record>$ $\rightsquigarrow$ n (Komponentenzugriff)
+
+(character-jedi? $<record>$) $\rightsquigarrow$ j (Komponentenzugriff)
+
+(character-force $<record>$) $\rightsquigarrow$ f (Komponentenzugriff)
+
+Zusammengesetzte Daten = \underline{Records} in Scheme.
+
+Record-Definition legt fest:
+
+\begin{itemize}
+  \item Record-Signatur
+  \item \underline{Konstruktor} (Baut aus Komponenten einen Record)
+  \item Prädikat (liegt Record vor?)
+  \item Liste von \underline{Selektoren} (lesen jewils eine Komponenten des Records)
+\end{itemize}
+
+\begin{center}
+(define-records-procedures $<t>$
+
+make-$<t>$ ; Konstruktor
+
+$<t>$?
+
+($<t>-<comp_1> ...<t>-<comp_n>4))$ ; Liste der n-Seleketoren
+\end{center}
+
+Verträge des Konstruktors / der Selektoren für Record-Signatur $<t>$ mit n Komponenten namens $<comp_1> ... <comp_n>$:
+
+\begin{itemize}
+  \item (: make-$<t>$ ($<t_1>...<t_n> \rightarrow <t>$))
+  \item (: $<t>-<comp_1> (<t> \rightarrow <t_1>$))
+  \item ...
+  \item (: $<t>-<comp_n> (<t> \rightarrow <t_n>$))
+\end{itemize}
+
+Es gilt für die Strings n, Booleans j und Integer f:
+
+(character-name (make-character n j f)) = n 
+
+(analog für den Rest)
+
+Interaktion von Funktionen (\underline{algebraische Eigenschaften}).
+
+Spezialform \underline{check-property}:
+
+\begin{center}
+(check-property
+
+(for-all (( $<id_1> \ <sig_1> ... <id_n> \ <sig_n>$))
+
+$<e>$))
+\end{center}
+$<e>$ bezieht sich auf $<id_1>... <id_n>$.
+
+Test erfolgreich, falls $<e>$ für bel. gewählte Bindungen für $<id_1>...<id_n>$ immer \#t ergibt.
+
+Interaktion von Selektor und Konstruktor:
+
+\begin{center}
+  (check-property
+  
+  (for-all ((n string)
+  
+  (j booleans)
+  
+  (f integer))
+  
+  (string=? (character-name (make-character n j f)) n )))
+\end{center}
+
+\underline{Beispiel:} Die Summe zweier natürlicher Zahlen ist mindestens so groß wie jede dieser Zahlen: $\forall x_1, x_2 \in \mathbb{N} : x_1 + x_2 \geq max \ {x_1, x_2}$
+
+\begin{center}
+(check-property
+
+(for-all (($x_1$ natural)
+
+($x_2$ natural))
+
+($\geq$ (+ $x_1$ $x_2$) (max $x_1$ $x_2$))))
+\end{center}
+
+Konstruktion von Funktionen, die zusammengesetzte Daten \underline{konsumieren}:
+
+\begin{itemize}
+  \item Welche Record-Komponenten sind relevant für Funktionen?
+  
+  $\rightarrow$ Schablone:
+  
+  ; könnte Charakter e ein Sith-Lord sein?
+  
+  (: sith? (character $\rightarrow$ boolean))
+  
+  (define sith?
+  
+  (lambda (e) ... (character-jedi? c) ... (character-force c) ... ))
+\end{itemize}
+
+Konstrukton von Funktionen, die zusammengesetzte Daten \underline{konstruieren}: 
+
+\begin{itemize}
+  \item Der Konstruktor \underline{muss} aufgerufen werden.
+  
+  $\rightarrow$ Schablone:
+  
+  (define 
+  
+  (lambda (...)
+  
+  ... (make-$<t>$ ...) ...))
+
+\end{itemize}
+
+
+
 \end{document}
