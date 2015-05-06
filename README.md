@@ -8,4 +8,5 @@
   <li>Substitutionsmodell, Fallunterscheidung - 23.04.15</li>
   <li>One-of Signatur - 28.04.15</li>
   <li>Zusammengesetzte Daten - 30.04.15</li>
+  <li>Fortsetzung zusammengesetzte Daten - 05.05.15</li>
 </ul>

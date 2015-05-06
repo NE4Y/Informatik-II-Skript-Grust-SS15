@@ -478,6 +478,39 @@ Konstrukton von Funktionen, die zusammengesetzte Daten \underline{konstruieren}:
 
 \end{itemize}
 
+\chapter{Fortsetzung zusammengesetzte Daten - 05.05.15}
+
+\begin{itemize}
+  \item lego-character
+    \begin{itemize}
+      \item figure
+      \item character
+        \begin{itemize}
+          \item Name
+          \item jedi?
+          \item force
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Sei $<p>$ ein Prädikat mit Signatur ($<t> \rightarrow boolean$). Eine Signatur der Form (predicate $<p>$) gilt für jeden Wert x der Signatur $<t>$ sofern ($<p>$ x) $\rightsquigarrow \#t$.
+Signatur (predicate $<p>$) ist somit \underline{spezifischer} (restriktiver) als die Signatur $<t>$ selbst. 
+
+Einfürhung eines \underline{neuen Signaturnamens} $<new-t>$ für die Signatur $<t>$: 
+
+\begin{center}
+  (define $<new-t>$ (signatur $<t>$))
+\end{center}
+
+Bsp.: 
+
+\begin{center}
+  (define farbe (signatur (one-of "Karo" "Herz" "Pik" "Kreuz")))
+\end{center}
+
+\begin{center}
+  (define latitude (signature (predicate latitude?)))
+\end{center}
 
 
 \end{document}
