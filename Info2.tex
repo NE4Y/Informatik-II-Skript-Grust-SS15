@@ -512,5 +512,99 @@ Bsp.:
   (define latitude (signature (predicate latitude?)))
 \end{center}
 
+\chapter{Gemische Daten - 07.05.15}
+Geocoding: Übersetzte eine Ortsangabe mittels des Google Maps Geocoding API (Application Programming Interface) in eine Position auf der Erdkugel.
 
+\begin{center}
+  (: geocoder (string $\rightarrow$ (mixed geocode geocode-error)))
+\end{center}
+
+Ein Geocode besteht aus:
+\begin{itemize}
+  \item Adresse (address) (string)
+  \item Ortsangabe (loc) (location)
+  \item Nordostecke (northeast) (location)
+  \item Südwestecke (southwest) (location)
+  \item Typ (type) (string)
+  \item Genauigkeit (accuracy) (string)
+\end{itemize}
+
+(: geocode-address (geocode $\rightarrow$ string)) ...
+
+Ein geocode-error besteht aus: 
+\begin{itemize}
+  \item Fehlerart (level) (one-of "TCP" "HTTP" "JSON" "API")
+  \item Fehlermeldung (message) (string)
+\end{itemize}
+
+Teachpack: geocoder.rkt
+
+\underline{Gemische Daten}
+Die Signatur
+\begin{center}
+  (mixed $<t1>...<t_n>$)
+\end{center}
+
+ist gültig für jeden Wert, der mindestens eine der Signatur $<t_1>...<t_n>$ erfüllt.
+
+\underline{Beispiel:} Datendefinition:
+
+Eine Antwort des Geocoders ist \underline{entweder}
+\begin{itemize}
+  \item ein Geocode (geocode) \underline{oder}
+  \item eine Fehlermeldung (geocode-error)
+\end{itemize}
+
+Beispiel (eingebaute Funktion string $\rightarrow$ number):
+
+(: string$\rightarrow$number (string $\rightarrow$ (mixed number (onfe of \#f))))
+
+(string$\rightarrow$number "42") $\rightsquigarrow$ 42
+
+(string$\rightarrow$number "foo") $\rightsquigarrow$ \#f
+
+Erinnerung:
+
+Das Prädikat $<t>?$ einer Signatur $<t>$ unterscheidet Werte der Signatur $<t>$ von \underline{allen anderen} Werten:
+
+(: $<t>?$ (any $\rightarrow$ boolean))
+
+Auch Prädikafür eingebaute Signaturen:
+
+\begin{itemize}
+  \item number?
+  \item complex?
+  \item real?
+  \item rational?
+  \item integer?
+  \item natural?
+  \item string?
+  \item boolean?
+\end{itemize}
+
+Prozeduren die gemische Daten der Signaturen $<t_1>...<t_n>$ konsumieren:
+
+\underline{Konstruktionsanleitung}:
+
+(: $<f>$ ((mixed $<t_1>...<t_n>$ $\rightarrow$ ...))
+
+(define $<f>$ (lambda (x) (cond (($<t_1>?$ x) ...) ... ($<t_n>?$ x)...)))))
+
+Mittels \underline{let} lassen sich Werte an \underline{lokale Namen} binden:
+
+\begin{center}
+  (let (($<id_1> <e_1>$) ... ($<id_n> <e_n>$)) $<e>$)
+\end{center}
+
+Die Ausdrücke $<e_1>...<e_n>$ werden \underline{parallel} ausgewertet $\rightarrow$ $<id_1>...<id_n>$ können in $<e>$ (\underline{und nur hier}) verwendet werden. Der Wert let-Ausdruck ist der Wert von $<e>$.
+
+Achtung: 'let' ist verfügbar ab Sprachebene "DMdA".
+
+'let' ist syntaktischer Zucker.
+
+(let (($<id_1> <e_1>$) ... ($<id_n> <e_n>$)) $<e>$)
+
+$\leftrightarrow$
+
+((lambda ($<id_1>...<id_n>$) $<e>$) $<e_1>...<e_n>$)
 \end{document}
