@@ -13,6 +13,13 @@
 \usepackage{amssymb}
 \usepackage{ulem}
 \usepackage[doublespacing]{setspace}
+%-Packages for linked Table of content
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=false, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
 
 
 \usepackage{titlesec}
@@ -463,7 +470,7 @@ Konstruktion von Funktionen, die zusammengesetzte Daten \underline{konsumieren}:
   (lambda (e) ... (character-jedi? c) ... (character-force c) ... ))
 \end{itemize}
 
-Konstrukton von Funktionen, die zusammengesetzte Daten \underline{konstruieren}: 
+Konstruktoren von Funktionen, die zusammengesetzte Daten \underline{konstruieren}: 
 
 \begin{itemize}
   \item Der Konstruktor \underline{muss} aufgerufen werden.
@@ -513,7 +520,7 @@ Bsp.:
 \end{center}
 
 \chapter{Gemische Daten - 07.05.15}
-Geocoding: Übersetzte eine Ortsangabe mittels des Google Maps Geocoding API (Application Programming Interface) in eine Position auf der Erdkugel.
+Geocoding: Übersetze eine Ortsangabe mittels des Google Maps Geocoding API (Application Programming Interface) in eine Position auf der Erdkugel.
 
 \begin{center}
   (: geocoder (string $\rightarrow$ (mixed geocode geocode-error)))
@@ -557,7 +564,7 @@ Eine Antwort des Geocoders ist \underline{entweder}
 
 Beispiel (eingebaute Funktion string $\rightarrow$ number):
 
-(: string$\rightarrow$number (string $\rightarrow$ (mixed number (onfe of \#f))))
+(: string$\rightarrow$number (string $\rightarrow$ (mixed number (one of \#f))))
 
 (string$\rightarrow$number "42") $\rightsquigarrow$ 42
 
