@@ -10,4 +10,6 @@
   <li>Zusammengesetzte Daten - 30.04.15</li>
   <li>Fortsetzung zusammengesetzte Daten - 05.05.15</li>
   <li>Gemischte Daten - 07.05.15</li>
+  <li>Parametrisch polymorphe Funktionen - 12.05.15</li>
+  <li>Listen - 12.05.15</li>
 </ul>

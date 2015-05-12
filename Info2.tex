@@ -512,7 +512,7 @@ Bsp.:
   (define latitude (signature (predicate latitude?)))
 \end{center}
 
-\chapter{Gemische Daten - 07.05.15}
+\chapter{Gemischte Daten - 07.05.15}
 Geocoding: Übersetzte eine Ortsangabe mittels des Google Maps Geocoding API (Application Programming Interface) in eine Position auf der Erdkugel.
 
 \begin{center}
@@ -539,7 +539,7 @@ Ein geocode-error besteht aus:
 
 Teachpack: geocoder.rkt
 
-\underline{Gemische Daten}
+\underline{Gemischte Daten}
 Die Signatur
 \begin{center}
   (mixed $<t1>...<t_n>$)
@@ -607,4 +607,94 @@ Achtung: 'let' ist verfügbar ab Sprachebene "DMdA".
 $\leftrightarrow$
 
 ((lambda ($<id_1>...<id_n>$) $<e>$) $<e_1>...<e_n>$)
+
+\chapter{Parametrisch polymorphe Funktionen - 12.05.15}
+Abstand zwier geografischer Positionen $l_1$, $l_2$ auf der Erdkugel in km (lat, lng jeweils in Radian):
+
+dist($l_1$, $l_2$) = Erdradius in km $\cdot$ acos(cos($l_1$.lat) $\cdot$ cos($l_1$.lng) $\cdot$ cos($l_2$.lat) $\cdot$ cos($l_2$.lng) + cos($l_1$.lat) $\cdot$ sin($l_1$.lng) $\cdot$ cos($l_2$.lat) $\cdot$ sin($l_2$.lng) + sin($l_1$.lat) $\cdot$ sin($l_2$.lat))
+
+\underline{Parametrisch polymorphe Funktionen}
+
+Beobachtung: Manche Prozeduren arbeiten unabhängig von den Signaturen ihrer Argumente: \underline{parametrisch polymophe Prozduren} (gr.: vielgestaltig). Nutze \underline{Signaturvariablen}: \%a, \%b, ...
+
+\underline{Beispiel:}
+
+; Identität
+
+(: id (\%a $\rightarrow$ \%a))
+
+(define id (lambda (x) x)) \\
+
+; Konstante Funktion (ignoriert zweites Argument)
+
+(: const (\%a \%b $\rightarrow$ \%a)) \\
+(define cost (lambda (x y) x)) \\
+
+; Projection (ein Argument auswählen) \\
+(: proj ((one-of 1 2) \%a \%b $\rightarrow$ (mixed \%a \%b))) \\
+(define proj (lambda (i $x1$ $x_2$) (cond ((= i 1) $x_1$) ((= i 2) $x_2$)))) \\
+
+Eine polymorphe Signatur steht für alle Signaturen in denen die Signaturvariablen durch konkrete Signaturen ersetz werden. \\
+
+\underline{Beispiel:}
+
+Wenn eine Prozedur (number \%a \%b $\rightarrow$ \%a) erfüllt, dann auch : \\
+(number string boolean $\rightarrow$ string) \\
+(number boolean natural $\rightarrow$ boolean) \\
+(number number number $\rightarrow$ number)
+
+; Ein polymorphes Paar (pair) besteht aus \\
+; - erster Komponente (first) \\
+; - zweiter Komponente (rest) \\
+; wobei die Komponenten bel. Signaturen besitzen \\
+\begin{center}
+(define-record-procedures-pair pair-of \\
+make-pair \\
+pair? \\
+(first rest))
+\end{center} 
+
+(pair-of $<t_1>$ $<t_2>$) ist eine Signatur für Paare, deren erste bzw. zweite Komponente die Signaturen $<t_1>$ bzw. $<t_2>$ erfüllen \\
+
+$\rightarrow$ pair-of: Signatur mit (zwei) Signaturparametern \\
+
+(: make-par (\%a \%b $\rightarrow$ (pair-of \%a \%b))) \\
+(: pair? (any $\rightarrow$ boolean)) \\
+(: first ((pair-of \%a \%b) $\rightarrow$ \%a)) \\
+(: rest ((pair-of \%a \%b) $\rightarrow$ \%b)) \\ 
+
+\chapter{Listen - 12.05.15}
+Eine \underline{Liste} von werten der Signatur $<t>$ (list-of $<t>$) ist entweder: 
+
+\begin{itemize}
+  \item leer (Signatur empty-list) oder
+  \item ein Paar (Signatur pair-of) aus einem Wert der Signatur $<t>$ und einer Liste von Werten der Signatur $<t>$
+\end{itemize} 
+
+(define list-of (lambda (t) (signature (mixed empty-list (pair-of t (list-of t)))))) \\
+
+Signatur empty-list bereits in Racket vordefiniert. Ebenfalls vordefiniert: 
+
+\begin{itemize}
+  \item (: empty empty-list) 
+  \item (: empty? (any $\rightarrow$ boolean))
+\end{itemize}
+
+\underline{Operationen auf Listen}
+\begin{itemize}
+  \item Konstruktoren:
+  
+  (: empty empty-list) ; leere Liste \\
+  (: make-pair (\%a (list-of \%a) $\rightarrow$ (list-of \%a)))
+  
+  \item Prädikate: 
+  
+  (: empty? (any $\rightarrow$ boolean)) ; leer Liste? \\
+  (: pair? (any $\rightarrow$ boolean)) ; nicht-leere Liste?
+  
+  \item Selektoren:
+  
+  (: first ((list-of \%a) $\rightarrow$ \%a)) ; Kopfelement \\
+  (: rest (list-of \%a) $\rightarrow$ (list-of \%a))) ; Restliste
+\end{itemize}
 \end{document}
