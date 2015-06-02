@@ -12,4 +12,6 @@
   <li>Gemischte Daten - 07.05.15</li>
   <li>Parametrisch polymorphe Funktionen - 12.05.15</li>
   <li>Listen - 12.05.15</li>
+  <li>Listenprozeduren - 19.05.2015</li>
+  <li>Rekursion auf Listen - 21.05.2015</li>
 </ul>

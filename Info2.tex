@@ -697,4 +697,119 @@ Signatur empty-list bereits in Racket vordefiniert. Ebenfalls vordefiniert:
   (: first ((list-of \%a) $\rightarrow$ \%a)) ; Kopfelement \\
   (: rest (list-of \%a) $\rightarrow$ (list-of \%a))) ; Restliste
 \end{itemize}
+
+\chapter{Listenprozeduren - 19.05.2015}
+\subsection*{Prozeduren, die Listen konsumieren}
+
+Konstruktionsanleitung befolgen!
+
+\underline{Beispiel:}
+
+; Summe der Zeichen der Liste xs
+
+(: list-sum (list-of number) $\rightarrow$ number) \\
+(check-expect (list-sum empty) 0) \\
+(check-expect (list-sum one-to-four) 10) \\
+
+Schablone (gemische + zusammengesetzte Daten)
+
+(define list-sum \\
+\ \ (lambda (xs)
+\ \ \ \ (cond ((empty? xs) 0) \\
+\ \ \ \ \ \ (pair? xs) (+ (first xs) (list-sum (rest xs))))))) \\
+
+(rest xs) mit Signatur (list-of number) ist selbst wieder eine \underline{kürzere Liste} von Zahlen. 
+
+(list-sum (rest xs)) erzielt Fortschritt !.
+
+Konstruktionsanleitung für Prozeduren <f>, die Liste xs konsumiert.
+
+(: $<f>$ ((list-of $<t_1>$) $\rightarrow$ $<t_2>$))  \\
+(define $<f>$ \\
+\ \ (lambda (xs) \ \
+\ \ \ \ (cond ((empty? xs) ...) \\
+\ \ \ \ \ \ \ (pair? xs) ... (first xs) ... ($<f>$ (rest xs)) ...)))
+
+Neue Sprachebene "Macht der Abstraktion"
+
+\begin{itemize}
+  \item Signatur (list-of \% a) eingebaut
+  \item Neuer syntaktischer Zucker:
+  
+  (list $<e_1> <e_2> ... <e_n>$)
+  
+  \item Ausgabeformat für nicht leere Liste:
+  
+  \#$<list \ x_1 \ x_2 ... \ x_n >$
+\end{itemize}
+
+Füge Listen xs, ys zusammen (concatenation):
+
+
+\underline{Beobachtung:}
+
+\begin{itemize}
+  \item Die Lnge von xs bestimmt die Anzahl der rekusriven Aufrufe von cat
+  \item Auf ys werden niemals Selektoren angewandt
+\end{itemize}
+
+\chapter{Rekursion auf Listen - 21.05.15}
+
+Generierung aller natürlichen Zahlen (vgl. gemische Daten). Eine natürliche Zahl (natuarl) ist entweder:
+
+\begin{itemize}
+  \item die 0 (zero)
+  \item der Nachfolger (succ) einer natürlichen Zahl.
+\end{itemize}
+
+\underline{Konstruktoren}
+
+(: zero natural) \\
+(define zero 0) \\
+(: succ (natural $\rightarrow$ natural)) \\
+(define succ (lambda (n) (+ n 1))) \\
+
+Vorgängerfunktion (pred), definiert für $n>0$:
+
+(: pred (natural $\rightarrow$ natural)) \\
+(define pred \\
+\ \ (lambda (n) (- n 1))) \\
+
+Bedinge algebraische Eigenschaften (s. check-property):
+
+($\Rightarrow \ <p> \ <t>$)
+
+Nur wenn $<p> \nRightarrow \#t$, wird Ausdruck $<t>$ ausgewertet und getestet ob $<t> \nRightarrow \ \#t$.
+
+\underline{Beispiel:}
+
+Fakultätsfunktion n! ($n \in \mathbb{N}$)
+
+0! = 1 \\
+n! = n $\cdot$ (n-1)! \\
+
+Konstruktionsanleitung für gem. Daten:
+
+; Berechne n! \\
+(: factorial (natural $\rightarrow$ natural)) \\
+( define factorial \\
+\ \ (lambda (n)  \\
+\ \ \ \ (cond ((= n 0) 1) (($>$ n 0) ($\cdot$ n (factorial (- n 1)))))) \\
+
+\underline{Beobachtung:}
+
+\begin{itemize}
+  \item Im letzten Zweig ist $n>0$ $\Rightarrow$ pred anwendbar 
+  \item ($<f>$ (- n 1)) hat die Signatur $<t>$
+\end{itemize}
+
+\underline{Satz}
+
+Eine Prozedur, die nach der Konstruktionsanleitung für Listen oder natürliche Zahlen konstruiert ist, \underline{terminiert immer} (= liefert immer ein Ergebnis).
+
+\underline{Beweis:} in Kürze
+
+Die \underline{Größe eines Ausdrucks} ist proportional zum Platzverbrauch des Reduktionsprozesses im Rechner
+
+$\Rightarrow$ Wenn mäglich, erzeugte Reduktionsprozesse, die konstanten Platzverbrauch - unabhängig vom Eingabeparametern - benötigen.
 \end{document}
