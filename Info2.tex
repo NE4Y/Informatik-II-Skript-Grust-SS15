@@ -889,7 +889,7 @@ Die Menge M* (= Liste mit Elementen aus M, (list-of M)) ist induktiv definiert.\
 \item (L1) empty $\in$ M* - (leere Liste)
 \item (L2) $\forall x \in M, xs \in M*$ (make-pair x xs) $\in$ M* (make-pair x xs) $\in$ M* - nicht-leere Liste
 \item (L3) Nichts sonst ist in M* (P5)
-
+\end{itemize}
  \subsubsection{Beweisschema der Listeninduktion:}
 Sei P(xs) eine Eigenschaft von Listen über M.\\
 (: P ((list-of M) $\rightarrow$ boolean)\\
@@ -897,8 +897,63 @@ I.A.: Falls P(empty)
 I.S.: und $\forall x \in$ M, xs : (P(xs) $\Rightarrow$ P((make-pair x xs)))\\
 dann $\forall xs \in$ M* : P(xs) $\checkmark$
 
+\chapter{ Eigenschaften von cat (append) - 16.6.}
+(define cat (lambda (xs ys)\\
+(cond ((empty? xs) ys)\\
+((pair? xs) (make-pair (first xs)\\
+(cat (rest xs) ys )))))\\
 
-\end{itemize}
+\begin{enumerate}
+\item (cat empty ys) = ys
+\item (cat xs empty) = xs
+\item (cat (cat xs ys) zs = (cat xs (cat ys zs)) - Assoziativität
+\end{enumerate}
+\subsubsection{Beweise}
+\begin{enumerate}
+\item (cat empty ys) *$\rightsquigarrow$  ys
+\item P(x) $\equiv$ (cat xs empty) = xs
+I.A.: P(empty): (cat empty empty) $\Rightarrow^{(1)}$ empty $\checkmark$\\
+I.S.: $\forall x \in M$ (P(xs) $\Rightarrow$ P(make-pair x xs))\\
+(cat (mp x xs) empty) \\
+*$\rightsquigarrow$ (mp $\underbrace{(first\ (mp \ x \ xs))}$ (cat $\underbrace{(rest\ (mp \ x \  xs))}$) empty))\\
+$\rightsquigarrow$  (mp \ \ \ \ \  \ \  \ \ \ \  x  \ \ \ \ \ \ \ \ \ \  (cat \ \ \ \ \ \ \ \ \ \ xs empty))\\
+$=^{I.V.}$ (mp x xs) $\square$
 
+
+\item Listeninduktion über xs (ys, zs $\in$ M* beliebig)\\
+(Pxs) $\equiv$ (cat (cat xs ys) zs = (cat xs (cat ys zs))\\
+I.A. P(empty) (cat (cat empty ys) zs)\\
+Links: $^{\rightarrow (1)} =$ (cat ys zs)\\
+Rechts: $^{\leftarrow (1)} =$ (cat empty (cat ys zs))  $\checkmark$\\
+I.S.: $\forall x \in$ M, xs (P(xs) $\Rightarrow$ P(mp x xs)) \\
+(cat (cat (mp x xs) ys) zs) *$\rightsquigarrow$ (cat (mp x (cat xs ys)) zs) *$\rightsquigarrow$ (mp x (cat (cat (xs ys) zs))\\
+$^{I.V.} = $ (mp x (cat xs (cat ys zs)))\\
+$* \hookleftarrow$ (cat (mp x xs) (cat ys zs)) $\checkmark$\\
+\{ Bemerkung: $\hookleftarrow$ soll $\rightsquigarrow$ nach links entsprechen. Wer den für LaTex findet, möge ihn hier eintragen \}
+\end{enumerate}
+
+\subsubsection{Beispiel: Interaktion von length und cat (Distributivität)}
+(define length (lambda (xs)\\
+(cond ((empty? xs) 0)\\
+((pair= xs) (+ 1 (length (rest xs))))))\\
+P(xs) $\equiv$ (length (cat (xs ys)) = (+ (length xs) (length ys)), ys $\in$ M* beliebig\\
+I.A. P(empty)
+(length (cat empty ys) $^{(1)} = $ (length ys) $^{+}=$ (+ 0 (length ys)) *$\hookleftarrow$ (+ (length empty) (length ys) $\checkmark$\\
+I.S. $\forall x \in $ M* P(xs) (length (cat (mp x xs) ys) $^{cat \ *} \rightsquigarrow$ (length (mp x (cat xs ys)))\\
+$^{lenght\ *} =$ (+ 1 (length (rest (mp x (cat xs ys))))) $^{rest} \rightsquigarrow$ () $^{I.V.} =$ (+ 1 (+ (length xs) (length ys)) $^{ass} =$ (+ (+ 1 (length xs) (length ys)) $^{length} * \ \hookleftarrow$ (+ (length (mp x xs)) (length ys)) $\checkmark$\\
+
+\subsubsection{Prozeduren höherer Ordnung (higher-order proceudres)}
+; Extrahiere die Elemente von xs, die Prädikat p? erfüllen\\
+(filter (\%a $\rightarrow$ boolean) (list-of \%a) $\rightarrow$ (list-of \%a)))\\
+(define filter (lambda (p? xs)\\
+(cond (empty? xs) xs)\\
+(pair? xs) (if (p? (first xs))\\
+(mp (first xs) (filter p? (rest xs)))\\
+(filter p? (rest xs)))))))\\
+
+- Wert des Prädikats p? ist Prozedur
+$\Rightarrow$ p? kann ausgetauscht werden
+
+\chapter{18.6.}
 
 \end{document}
