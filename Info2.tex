@@ -749,13 +749,13 @@ Füge Listen xs, ys zusammen (concatenation):
 \underline{Beobachtung:}
 
 \begin{itemize}
-  \item Die Lnge von xs bestimmt die Anzahl der rekusriven Aufrufe von cat
+  \item Die Länge von xs bestimmt die Anzahl der rekursiven Aufrufe von cat
   \item Auf ys werden niemals Selektoren angewandt
 \end{itemize}
 
 \chapter{Rekursion auf Listen - 21.05.15}
 
-Generierung aller natürlichen Zahlen (vgl. gemische Daten). Eine natürliche Zahl (natuarl) ist entweder:
+Generierung aller natürlichen Zahlen (vgl. gemische Daten). Eine natürliche Zahl (natural) ist entweder:
 
 \begin{itemize}
   \item die 0 (zero)
@@ -811,5 +811,94 @@ Eine Prozedur, die nach der Konstruktionsanleitung für Listen oder natürliche 
 
 Die \underline{Größe eines Ausdrucks} ist proportional zum Platzverbrauch des Reduktionsprozesses im Rechner
 
-$\Rightarrow$ Wenn mäglich, erzeugte Reduktionsprozesse, die konstanten Platzverbrauch - unabhängig vom Eingabeparametern - benötigen.
+$\Rightarrow$ Wenn möglich, erzeugte Reduktionsprozesse, die konstanten Platzverbrauch - unabhängig vom Eingabeparametern - benötigen.
+
+
+
+
+\chapter{Induktive Definitionen 11.6.15}
+Konstruktive Definition der natürlichen Zahlen:
+Definition: (Paeno-Axiome)\\
+\begin{itemize}
+\item (P1) $0 \in \mathbb{N}$							(Null)
+\item (P2) $\forall n \in \mathbb{N}$: $succ(n) \in \mathbb{N}$ (Nachfolger)
+\item (P3) $\forall n \in \mathbb{N}$: $succ(n) \ne 0$
+\item (P4) $\forall m,n \in \mathbb{N}$: $succ(m) = succ(n) \Rightarrow m = n$
+Durch P3 und P4 ist $\mathbb{N}$ induktiv definiert.
+\item (P5) Induktionsaxiom: Für jede Menge $M \subseteq \mathbb{N}$ mit $0 \in M$ und $\forall n: (n \in M \Rightarrow succ(n) \in M)$ gilt $M =N$\\
+"Nichts sonst ist in $\mathbb{N}$"
+\end{itemize}
+
+\subsection{Beweisschema vollständige Induktion}
+Sei $P(n)$ eine Eigenschaft einer Zahl $n \in \mathbb{N}$ (: P (natural $\rightarrow$ boolean))\\
+Ziel: $\forall n \in \mathbb{N}: P(n)$\\
+Definiere $M = \lbrace n\in \mathbb{N} | P(n) \rbrace \subseteq \mathbb{N}$
+Induktionsaxiom:
+Falls $0 \in M$ und $\forall n( n\in M \Rightarrow succ (n) \in M)$ dann $M = N$\\
+Induktionsanfang(I.A.): Falls $P(0)$, Induktionsschritt (I.S.) und $\forall n (P(n) = P(succ(n)))$ dann $\forall n \in \mathbb{N} P(n)$
+
+\subsubsection{Beispiel 1}
+$1 = 1$\\
+$1 + 3 = 4$\\
+$1 + 3 + 5 = 9$\\
+$1 + 3 + 5 + 7 = 16$\\
+$\cdots$\\
+$P(n) \equiv \sum \limits_{i = 0}^{n} (2i + 1) = (n+1)^2$
+Zeige : $\forall n \in \mathbb{N} : P(n)$\\
+I.A. : $P(0) \Rightarrow P(n+1))$
+\begin{equation}
+ \sum \limits_{i = 0}^{n +1} (2i + 1) = \sum \limits_{i = 0}^{n} (2i + 1) + (2(n+1) +1) \\ 
+ = (n+1)^2 + (2(n+1)+1)\\
+ = n^2 + 2n + 1 + 2n +3 \\
+ = n^2 + 4n +4\\
+ = (n+2)^2 \square
+\end{equation}
+
+\subsubsection{Beispiel 2}
+(define factorial (lambda (k)\\
+(if (= k 0) 1 (* k (facotrial (- k 1))))))\\
+$P(n) \equiv$ (factorial n) $ = \underline{n!}$	\\
+ Bemerkung: $\underline{x}$ : Racket-Repräsentation für $x \in \mathbb{N}$\\
+ Zeige: $\forall n \in \mathbb{N}: P(n)$\\
+ I.A. P(0) factorial ($\underline{0}$)
+ *$\rightsquigarrow$ ((lambda(k) ...) 0)  $\rightsquigarrow$  (if(= $\underline{0}$ 0) 1 ...)  $\rightsquigarrow$ (if \#t 1 ...)  $\rightsquigarrow$ $1= 0! \checkmark$\\
+ I.S. : $\forall n$ (P(n) $\Rightarrow$ P(n + 1)) factorial (n + 1) *$\rightsquigarrow$ ((lambda (n) ...) n + 1) $\rightsquigarrow$ (if (= $\underline{(n + 1)}$ 0) ... (* ...)) $\rightsquigarrow$ (if \#f ... (* ...)) $\rightsquigarrow$ (* $\underline{n + 1}$ (factorial (- $\underline{n + 1}$ 1))) $\rightsquigarrow$ (* n + 1 (factorial n)) = (* $\underline{n + 1}$ $\underline{n!}$) = $\underline{(n + 1)!}$
+
+\subsubsection{Beispiel 3}
+Nach Konstuktionsanleitung über $\mathbb{N}$ konstruierte $f$ terminieren immer.\\
+ Sei (: f (natural natural $\rightarrow$ natural)) definiert durch\\
+(define f (lambda (n)
+(if (= n 0) base (step (f (- n 1)) n ))))\\ 
+ \begin{itemize}
+ \item (: base natural)
+ \item (: step (natural natural $\rightarrow$ natural))
+ \end{itemize}
+ 
+Bsp: step $\equiv$ (lambda (x y) (* y x))\\
+Dann gilt (Pn) $\equiv$ (f n) terminiert (mit Ergebnis der Signatur natural)\\
+
+ Zeige: $\forall n \in \mathbb{N} : P(n)$\\
+ I.A. P(0): (f 0) *$\rightsquigarrow$ (if (= $\underline{0}  \ 0$) base ...) $\rightsquigarrow$ (if \#t base ...) $\rightsquigarrow$ base $\checkmark$\\
+ I.S. $\forall n  (P(n) \Rightarrow P (n+1)):(f \  \underline{n + 1})$\\
+ *$\rightsquigarrow$ (if (= $\underline{n + 1}$ 0) ... (step ...)) $\rightsquigarrow$ (if \#f ... (step ...)) $\rightsquigarrow$ (step (f (- $\underline{n +1}$ 1) n + 1))\\ $\rightsquigarrow$ (step $\underbrace{(f \underline{n}}$) $\underline{n + 1}$) $\Rightarrow$ (step (f n) n+ 1) terminiert. $\checkmark$\\
+ - - - - terminiert
+ 
+ \subsubsection{Definition: Listen, endliche Folgen}
+Die Menge M* (= Liste mit Elementen aus M, (list-of M)) ist induktiv definiert.\\
+\begin{itemize}
+\item (L1) empty $\in$ M* - (leere Liste)
+\item (L2) $\forall x \in M, xs \in M*$ (make-pair x xs) $\in$ M* (make-pair x xs) $\in$ M* - nicht-leere Liste
+\item (L3) Nichts sonst ist in M* (P5)
+
+ \subsubsection{Beweisschema der Listeninduktion:}
+Sei P(xs) eine Eigenschaft von Listen über M.\\
+(: P ((list-of M) $\rightarrow$ boolean)\\
+I.A.: Falls P(empty)
+I.S.: und $\forall x \in$ M, xs : (P(xs) $\Rightarrow$ P((make-pair x xs)))\\
+dann $\forall xs \in$ M* : P(xs) $\checkmark$
+
+
+\end{itemize}
+
+
 \end{document}
