@@ -443,42 +443,33 @@ Interaktion von Funktionen (\underline{algebraische Eigenschaften}).
 
 Spezialform \underline{check-property}:
 
-\begin{center}
+\begin{lstlisting}
 (check-property
-
-(for-all (( $<id_1> \ <sig_1> ... <id_n> \ <sig_n>$))
-
-$<e>$))
-\end{center}
+  (for-all ((<id_1>  <sig_1> ... <id_n>  <sig_n>))
+  <e>))
+\end{lstlisting}
 $<e>$ bezieht sich auf $<id_1>... <id_n>$.
 
 Test erfolgreich, falls $<e>$ für bel. gewählte Bindungen für $<id_1>...<id_n>$ immer \#t ergibt.
 
 Interaktion von Selektor und Konstruktor:
 
-\begin{center}
-  (check-property
-  
+\begin{lstlisting}
+(check-property  
   (for-all ((n string)
-  
-  (j booleans)
-  
-  (f integer))
-  
+            (j booleans)
+            (f integer))
   (string=? (character-name (make-character n j f)) n )))
-\end{center}
+\end{lstlisting}
 
 \underline{Beispiel:} Die Summe zweier natürlicher Zahlen ist mindestens so groß wie jede dieser Zahlen: $\forall x_1, x_2 \in \mathbb{N} : x_1 + x_2 \geq max \ {x_1, x_2}$
 
-\begin{center}
+\begin{lstlisting}
 (check-property
-
-(for-all (($x_1$ natural)
-
-($x_2$ natural))
-
-($\geq$ (+ $x_1$ $x_2$) (max $x_1$ $x_2$))))
-\end{center}
+  (for-all ((x_1 natural)
+            (x_2 natural))
+  (\geq (+ x_1 x_2) (max x_1 x_2))))
+\end{lstlisting}
 
 Konstruktion von Funktionen, die zusammengesetzte Daten \underline{konsumieren}:
 
@@ -491,9 +482,11 @@ Konstruktion von Funktionen, die zusammengesetzte Daten \underline{konsumieren}:
   
   (: sith? (character $\rightarrow$ boolean))
   
+  \begin{lstlisting}
   (define sith?
-  
-  (lambda (e) ... (character-jedi? c) ... (character-force c) ... ))
+    (lambda (e) 
+      ... (character-jedi? c) ... (character-force c) ... ))
+  \end{lstlisting}
 \end{itemize}
 
 Konstrukton von Funktionen, die zusammengesetzte Daten \underline{konstruieren}: 
@@ -503,11 +496,11 @@ Konstrukton von Funktionen, die zusammengesetzte Daten \underline{konstruieren}:
   
   $\rightarrow$ Schablone:
   
-  (define 
-  
-  (lambda (...)
-  
-  ... (make-$<t>$ ...) ...))
+  \begin{lstlisting}
+  (define    
+    (lambda (...)
+      (make-<t> ...) ...))
+  \end{lstlisting}
 
 \end{itemize}
 
@@ -537,13 +530,16 @@ Einfürhung eines \underline{neuen Signaturnamens} $<new-t>$ für die Signatur $
 
 Bsp.: 
 
-\begin{center}
-  (define farbe (signatur (one-of "Karo" "Herz" "Pik" "Kreuz")))
-\end{center}
+\begin{lstlisting}
+(define farbe 
+  (signatur 
+    (one-of "Karo" "Herz" "Pik" "Kreuz")))
+\end{lstlisting}
 
-\begin{center}
-  (define latitude (signature (predicate latitude?)))
-\end{center}
+\begin{lstlisting}
+(define latitude 
+  (signature (predicate latitude?)))
+\end{lstlisting}
 
 \chapter{Gemischte Daten - 07.05.15}
 Geocoding: Übersetzte eine Ortsangabe mittels des Google Maps Geocoding API (Application Programming Interface) in eine Position auf der Erdkugel.
@@ -680,12 +676,12 @@ Wenn eine Prozedur (number \%a \%b $\rightarrow$ \%a) erfüllt, dann auch : \\
 ; - erster Komponente (first) \\
 ; - zweiter Komponente (rest) \\
 ; wobei die Komponenten bel. Signaturen besitzen \\
-\begin{center}
-(define-record-procedures-pair pair-of \\
-make-pair \\
-pair? \\
-(first rest))
-\end{center} 
+\begin{lstlisting}
+(define-record-procedures-pair pair-of 
+  make-pair 
+  pair? 
+  (first rest))
+\end{lstlisting} 
 
 (pair-of $<t_1>$ $<t_2>$) ist eine Signatur für Paare, deren erste bzw. zweite Komponente die Signaturen $<t_1>$ bzw. $<t_2>$ erfüllen \\
 
@@ -704,7 +700,12 @@ Eine \underline{Liste} von werten der Signatur $<t>$ (list-of $<t>$) ist entwede
   \item ein Paar (Signatur pair-of) aus einem Wert der Signatur $<t>$ und einer Liste von Werten der Signatur $<t>$
 \end{itemize} 
 
-(define list-of (lambda (t) (signature (mixed empty-list (pair-of t (list-of t)))))) \\
+\begin{lstlisting}
+(define list-of 
+  (lambda (t) 
+    (signature 
+      (mixed empty-list (pair-of t (list-of t))))))
+\end{lstlisting} 
 
 Signatur empty-list bereits in Racket vordefiniert. Ebenfalls vordefiniert: 
 
@@ -717,18 +718,23 @@ Signatur empty-list bereits in Racket vordefiniert. Ebenfalls vordefiniert:
 \begin{itemize}
   \item Konstruktoren:
   
-  (: empty empty-list) ; leere Liste \\
-  (: make-pair (\%a (list-of \%a) $\rightarrow$ (list-of \%a)))
+  \begin{lstlisting}
+  (: empty empty-list) ; leere Liste
+  (: make-pair (%a (list-of %a) -> (list-of %a)))
+  \end{lstlisting}
   
   \item Prädikate: 
   
-  (: empty? (any $\rightarrow$ boolean)) ; leer Liste? \\
-  (: pair? (any $\rightarrow$ boolean)) ; nicht-leere Liste?
+  \begin{lstlisting}
+  (: empty? (any -> boolean)) ; leer Liste? 
+  (: pair? (any -> boolean)) ; nicht-leere Liste?
+  \end{lstlisting}
   
   \item Selektoren:
-  
-  (: first ((list-of \%a) $\rightarrow$ \%a)) ; Kopfelement \\
-  (: rest (list-of \%a) $\rightarrow$ (list-of \%a))) ; Restliste
+  \begin{lstlisting}  
+  (: first ((list-of %a) -> %a)) ; Kopfelement 
+  (: rest (list-of %a) -> (list-of %a))) ; Restliste
+  \end{lstlisting}
 \end{itemize}
 
 \chapter{Listenprozeduren - 19.05.2015}
@@ -738,18 +744,22 @@ Konstruktionsanleitung befolgen!
 
 \underline{Beispiel:}
 
+\begin{lstlisting}
 ; Summe der Zeichen der Liste xs
+(: list-sum (list-of number) -> number) 
+(check-expect (list-sum empty) 0) 
+(check-expect (list-sum one-to-four) 10) 
 
-(: list-sum (list-of number) $\rightarrow$ number) \\
-(check-expect (list-sum empty) 0) \\
-(check-expect (list-sum one-to-four) 10) \\
+\end{lstlisting}
 
 Schablone (gemische + zusammengesetzte Daten)
 
-(define list-sum \\
-\ \ (lambda (xs)
-\ \ \ \ (cond ((empty? xs) 0) \\
-\ \ \ \ \ \ (pair? xs) (+ (first xs) (list-sum (rest xs))))))) \\
+\begin{lstlisting}
+(define list-sum
+  (lambda (xs)
+    (cond ((empty? xs) 0)
+          ((pair? xs) (+ (first xs) (list-sum (rest xs)))))))
+\end{lstlisting}
 
 (rest xs) mit Signatur (list-of number) ist selbst wieder eine \underline{kürzere Liste} von Zahlen. 
 
@@ -757,11 +767,14 @@ Schablone (gemische + zusammengesetzte Daten)
 
 Konstruktionsanleitung für Prozeduren <f>, die Liste xs konsumiert.
 
-(: $<f>$ ((list-of $<t_1>$) $\rightarrow$ $<t_2>$))  \\
-(define $<f>$ \\
-\ \ (lambda (xs) \ \
-\ \ \ \ (cond ((empty? xs) ...) \\
-\ \ \ \ \ \ \ (pair? xs) ... (first xs) ... ($<f>$ (rest xs)) ...)))
+\begin{lstlisting}
+(: <f> ((list-of <t_1>) -> <t_2>))
+(define <f>
+  (lambda (xs)
+    (cond ((empty? xs) ...)
+          ((pair? xs) ... (first xs) ... (<f> (rest xs)) ...)))
+\end{lstlisting}
+
 
 Neue Sprachebene "Macht der Abstraktion"
 
@@ -769,7 +782,9 @@ Neue Sprachebene "Macht der Abstraktion"
   \item Signatur (list-of \% a) eingebaut
   \item Neuer syntaktischer Zucker:
   
-  (list $<e_1> <e_2> ... <e_n>$)
+  \begin{lstlisting}
+  (list <e_1> <e_2> ... <e_n>)
+  \end{lstlisting}
   
   \item Ausgabeformat für nicht leere Liste:
   
@@ -797,16 +812,24 @@ Generierung aller natürlichen Zahlen (vgl. gemische Daten). Eine natürliche Za
 
 \underline{Konstruktoren}
 
-(: zero natural) \\
-(define zero 0) \\
-(: succ (natural $\rightarrow$ natural)) \\
-(define succ (lambda (n) (+ n 1))) \\
+\begin{lstlisting}
+(: zero natural)
+(define zero 0)
+
+(: succ (natural -> natural))
+(define succ 
+  (lambda (n) 
+    (+ n 1))) 
+\end{lstlisting}
 
 Vorgängerfunktion (pred), definiert für $n>0$:
 
-(: pred (natural $\rightarrow$ natural)) \\
-(define pred \\
-\ \ (lambda (n) (- n 1))) \\
+\begin{lstlisting}
+(: pred (natural -> natural)) \\
+(define pred 
+  (lambda (n) 
+    (- n 1))) 
+\end{lstlisting}
 
 Bedinge algebraische Eigenschaften (s. check-property):
 
@@ -823,11 +846,14 @@ n! = n $\cdot$ (n-1)! \\
 
 Konstruktionsanleitung für gem. Daten:
 
-; Berechne n! \\
-(: factorial (natural $\rightarrow$ natural)) \\
-( define factorial \\
-\ \ (lambda (n)  \\
-\ \ \ \ (cond ((= n 0) 1) (($>$ n 0) ($\cdot$ n (factorial (- n 1)))))) \\
+\begin{lstlisting}
+; Berechne n! 
+(: factorial (natural -> natural)) 
+( define factorial 
+  (lambda (n)  
+    (cond ((= n 0) 1) 
+          ((> n 0) (* n (factorial (- n 1)))))) 
+\end{lstlisting}
 
 \underline{Beobachtung:}
 
