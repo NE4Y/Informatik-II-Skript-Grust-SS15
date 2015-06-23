@@ -1067,4 +1067,75 @@ Beispiel Länge einer Liste durch Listenreduktion:
 
 mit c = (lambda (x r) (+ 1 r))
 
+\chapter{Teachpack "universe" - 23.6.}
+Teachpack "universe" nutzt H.O.P., um Animationen (Sequenzen von bildern/Szenen) zu definieren.\\
+\begin{lstlisting}
+(big-bang < init >\\
+(on-tick <tock>)\\
+(to-draw <render><w><h>)\\
+\end{lstlisting}
+
+ \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \  \ \ \ \ \ \ \ \ optional\\
+ 
+ - (: $<$init$>$ \%a)\\
+ Startzustand\/
+ -(: $<$tock$>$ (\%a $\rightarrow$ \%a))\\
+ Funktion, die neuen Zustand aus altem Zustand berechnet, wird 28 Mal pro Sekunde aufgerufen.\\
+ - (: $<$render$>$ (\%a $\rightarrow$ image))\\
+ Funktion, die aus aktuellem Zustand ein Bild einer Szene berechnet (wird in Fenster mit Dimension $<$w$>$x$<$h$>$ Pixel angezeigt).\\
+ - Bei Schliessen der Animation wird der letzte Zustand zurück gegeben.
+
+\subsection{Implementierung Star Wars VII}
+Ausgabe der römischen Episodennummer für Film f.
+(roman (film-episode f))\\
+Gesuchte Funktion ist $\underline{Komposition}$ von zwei existierenden Prozeduren.
+\begin{enumerate}
+\item Wende 'film-episode' an, dann
+\item wende 'roman' auf das Ergebnis von (1) an.
+\end{enumerate}
+\subsection{Komposition von Prozeduren allgemein:}
+\begin{lstlisting}
+(compose f g) \equiv (f (g x))
+\end{lstlisting}
+neue Prozedur realisiert\\
+Komposition von f und g.
+
+Mathematik: (compose f g) $\equiv$ f $\circ$ g. 'f nach g'\\
+\begin{lstlisting}
+(: compose ((%b -> %c) (%a -> %b) -> (%a ->%c)))
+(define compose
+	(lambda (f g)
+		(lambda (x)
+			(f (g x)))))
+\end{lstlisting}
+repeat: n-fache Komposition von f mit sich selbst (n-fache Anwendung von f, Exponentiation):\\
+$f^0 = $ id - (id $\equiv$ (lambda (x) x))\\
+$f^n = f \circ f^{n-1}$
+\begin{lstlisting}
+(: repeat (natural (%a -> %a) -> (%a -> %a)))
+(define repeat
+	(lambda (n f)
+		(cond ((= n 0) (lambda (x) x))
+		      ((> n 0) (compose f (repeat (- n 1) f))))))
+\end{lstlisting}
+
+; Greife auf das n-te Element der Liste xs zu
+\begin{lstlisting}
+(: nth (natural (list-of %a) -> %a))
+(define nth 
+	(lambda (n xs)
+		((compose first (repeat (- n 1) rest)) xs)))
+\end{lstlisting}
+
+\section{Parametrische Kurven (Higher Order Datenstrukturen)}
+$f(t) = <x(t), y(t)>$
+siehe rkt-Datei
+
+Reduktion:\\
+((add 1) 21)\\
+$^{eval_id} \rightsquigarrow$ (((lambda (x) (lambda (y) (+ x y))) 1) 21)\\
+$^{apply-lambda(x)} \rightsquigarrow \underline{ ((lambda (y) (+ 1 y)}) 21)$\\
+$^{apply-lambda(y)} \rightsquigarrow$ (+ 1 21)
+
+
 \end{document}
