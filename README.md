@@ -14,4 +14,8 @@
   <li>Listen - 12.05.15</li>
   <li>Listenprozeduren - 19.05.2015</li>
   <li>Rekursion auf Listen - 21.05.2015</li>
+  <li>Endrekursive Funktionen - 09.06.2015</li>
+  <li>Induktive Definition - 11.06.2015</li>
+  <li>Prozeduren höherer Ordnung - 16.06.2015</li>
+  <li>Fortführung Prozeduren höherer Ordnung - 18.06.2015</li>
 </ul>
