@@ -1137,5 +1137,72 @@ $^{eval_id} \rightsquigarrow$ (((lambda (x) (lambda (y) (+ x y))) 1) 21)\\
 $^{apply-lambda(x)} \rightsquigarrow \underline{ ((lambda (y) (+ 1 y)}) 21)$\\
 $^{apply-lambda(y)} \rightsquigarrow$ (+ 1 21)
 
+\chapter{Currying (Haskell B. Curry) 25.6.}
+Erstmals implementier von Moses Schönfinkel.\\
+Anwendung einer Prozedur auf ihr erstes Argument liefert Prozedur der restlichen Argumente.
+\begin{itemize}
+\item Jede n-stellige Prozedur lässt sich in eine alternative curried Prozedur transformieren, die in n Schritten jeweils ein Argument: curry. Umgekehrte Transformation: uncurry.
+\end{itemize}
+
+(\%a \%b $\rightarrow$ \%c) 		$\rightarrow$	Applikation auf 2 Argumente (Signaturen \%a \%b) $\rightarrow$ \%c\\
+curry $\uparrow$ $\downarrow$ uncurry										$=$
+(\%a (\%b $\rightarrow$ \%c)) 		$\rightarrow$	Applikation auf 1 Argument (Signaturen \%a) $\rightarrow$ (\%b \%c) $\rightarrow$ Applikation auf 1 Argument (Signatur \%b) $\rightarrow$ \%c \\
+\ \ \ \ \ \ \ partielle Applikation
+
+\begin{lstlisting}
+(: curry ((\%a \%b -> \%c) -> (\%a (\%b -> \%c))))
+(define curry
+	(lambda (f)
+		(lambda (x)
+			(lambda (y)
+				(f x y)))))
+
+(: uncurry ((\%a (\%b -> \%c)) -> ((\%a \%b -> \%c) ))
+(define uncurry
+	(lambda (f)
+		(lambda (x y)
+			((f x) y))))
+\end{lstlisting}
+
+\section{Beispiel Ableitung als HOP}
+Bestimmung der ersten Ableitung der reellen Funktion f durch Bildung des Differenzenquotienten:\\
+$\lim \limits_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h} = f'(x)$ Differenzialquotient\\
+\begin{itemize}
+\item Operator \_' (Ableitung) konsumiert Funktion f und produziert Funktion f' $\Rightarrow$ \_' ist higher-order!
+\end{itemize}
+
+\begin{lstlisting}
+(: diffquot (h f -> f')
+(: diffquot (reatl (real -> real) -> (real -> real)))
+(define difquot
+	(lambda (h f)
+		(lambda (x)
+			(/ (- (f (+ x h)) (f x))
+				h))))
+\end{lstlisting}
+
+\section{Beispiel Charakteristische Funktion einer Menge $s \subseteq M$}
+Charakteristische Funktion für S: $(: \chi_S (M \rightarrow$ boolean))\\
+$\chi_{s} (x) = 
+ \begin{cases}
+  &  \textbf{\# t} , \ x \in S \\
+ &  \textbf{ \# f } , \ sonst
+  \end{cases}$
+
+$\chi_s(m) = $ \#f
+$\chi_s(s) = $ \#t
+\begin{itemize}
+\item Idee: Repräsentative $S \subseteq M$ durch Prozedur (M $\rightarrow$ boolean) und Mengenoperation durch Operation auf Prozeduren (H.O.P.)
+\item :-) Darstellung unendlicher Mengen ($S_{42} = \lbrace x \in \mathbb{Z} | x > 42 \rbrace)$
+\item :-) Mengenoperationen ($\cup , \cap , \backslash )$ in konstanter Zeit.
+\end{itemize}
+
+Element $x$ in Menge S einfügen
+
+$\chi_{Su\lbrace x \rbrace}(y) =
+ \begin{cases}
+   & \textbf{\# t }, \ x \in S \\
+   & \textbf{\chi_{S}(y) } , \ sonst
+  \end{cases}$
 
 \end{document}
