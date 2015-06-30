@@ -1183,11 +1183,10 @@ $\lim \limits_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h} = f'(x)$ Differenzialquo
 
 \section{Beispiel Charakteristische Funktion einer Menge $s \subseteq M$}
 Charakteristische Funktion für S: $(: \chi_S (M \rightarrow$ boolean))\\
-$\chi_{s} (x) = 
- \begin{cases}
-  &  \textbf{\# t} , \ x \in S \\
- &  \textbf{ \# f } , \ sonst
-  \end{cases}$
+%$\chi_{s} (x) =  \begin{cases}
+%  &  \textbf{\# t} , \ x \in S \\
+% &  \textbf{ \# f } , \ sonst
+  %\end{cases}$
 
 $\chi_s(m) = $ \#f
 $\chi_s(s) = $ \#t
@@ -1199,10 +1198,126 @@ $\chi_s(s) = $ \#t
 
 Element $x$ in Menge S einfügen
 
-$\chi_{Su\lbrace x \rbrace}(y) =
- \begin{cases}
-   & \textbf{\# t }, \ x \in S \\
-   & \textbf{\chi_{S}(y) } , \ sonst
-  \end{cases}$
+%$\chi_{Su\lbrace x \rbrace}(y) =
+ %\begin{cases}
+  % & \textbf{\# t }, \ x \in S \\
+   %& \textbf{\chi_{S}(y) } , \ sonst
+  %\end{cases}$
+
+
+\chapter{set-inset, Streams, delay, force 30.6.}
+Konvertiere Liste xs in eine Menge gleicher Elemente:
+\begin{lstlisting}
+;      xs
+;   +--+--+                             
+;   |  |  |                             
+;   +--+--+                         
+;   /     \                                
+; x1      +--+--+                         xs
+;         |  |  |                           \ 
+;         +--+--+     (foldr empty-set set-inset))
+;         /     \                                
+;       x2       .                             
+;                 \                             
+;                 +--+--+                     
+;                 |  |  |                         
+;                 +--+--+                           
+;                 /     \          
+;                xn     empty  
+\end{lstlisting}
+
+$\rightsquigarrow$ (fold empty-set set-in-set xs))
+- empty $\rightarrow$ empty-set
+- make-pair $\rightarrow$ set -inset
+
+\begin{lstlisting}
+;      set-inset                    
+;        /     \                                
+;     xn     set-inset                        
+;      /            \          
+;                     .
+;                       .
+;                        \
+;                   set-inset
+;                   /       \
+;                xn     empty-set
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Charakterisiere Funktion zur Repräsentation von Mengen:}
+\begin{enumerate}
+\item Performance: set-member 2
+		hat lineare Laufzeit bei mit set-inset konstruierten Mengen (wie Liste!)
+\item Vorteile:
+\begin{itemize}
+\item unendliche Mengen darstellbar
+\item Mengenoperationen in konstanter Zeit durchführbar
+\end{itemize}
+\item Nachteil: Elemente sind nicht aufzählbar
+\end{enumerate}
+
+
+\subsection{Steams (stream-of \%a)}
+Unendliche Ströme von Elementen $x_i$ mit Signaturen \%a. Ein Stream ist ein Paar.
+
+\begin{lstlisting}
+;   Stream-head
+;   +----+-------+                             
+;   | x1 |  tail |                             
+;   +----+-------+   
+\end{lstlisting}
+\%a ($\rightarrow$ (stream-of \%a))
+-Erst eine Ausführung des tails ($\underline{fore}$) erzeugt nächstes Stream-Elemt (daher auch: lazy list)
+
+\begin{lstlisting}
+
+;   +----+---------------+                          +----+-------+      
+;   | xn |  (force tail) |            ->            | x2 |  tail |         
+;   +----+---------------+                          +----+-------+ 
+\end{lstlisting}
+
+- Vergleich:
+\begin{lstlisting}
+;   (list-of %a)                        (stream-of %a)
+;      xs
+;   +--+--+                              +----+--+      
+;   |  |  |                              | xs |  |   
+;   +--+--+                              +----+--+  
+;   /     \                              /       \
+; x1      +--+--+                      xn      +--+--+      
+;         |  |  |                              |  | 2|   
+;         +--+--+                              +--+--+  
+;         /     \                              /
+;       x2       .                           x2
+;                 \                             
+;                 +--+--+                     
+;                 |  |  |                         
+;                 +--+--+                           
+;                 /     \          
+;                xn     empty  
+\end{lstlisting}
+
+\subsubsection{delayed evaluation}
+Verzögerte Auswertung eines Ausdrucks (delayed evaluation)\\
+\begin{itemize}
+\item (delay e) : Verzögere die Auswertung des Ausdrucks e und liefere "Versprechen " (promise), e bei Bedarf später auswerten zu können
+(delay e) $\equiv$ (lambda () e $\lbrace$nicht ausgewertet$\rbrace$)
+
+\item (force p): Erzwingt Auswertung des Promise p, liefert Wert zurück\\
+(: force (($\rightarrow$ \%a) $\rightarrow$ \%a))
+
+\begin{lstlisting}
+(define force
+	(lambda (p)
+		(p)))
+\end{lstlisting}
+
+\end{itemize}
+
+
+
+
+
 
 \end{document}
