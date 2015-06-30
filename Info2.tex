@@ -1183,12 +1183,10 @@ $\lim \limits_{h \rightarrow 0} \frac{f(x+h) - f(x)}{h} = f'(x)$ Differenzialquo
 
 \section{Beispiel Charakteristische Funktion einer Menge $s \subseteq M$}
 Charakteristische Funktion für S: $(: \chi_S (M \rightarrow$ boolean))\\
-%$\chi_{s} (x) =  \begin{cases}
-%  &  \textbf{\# t} , \ x \in S \\
-% &  \textbf{ \# f } , \ sonst
-  %\end{cases}$
+(Sei 0 = \#f und 1 = \#t)\\
+$\chi_{S}(x) =\left\{\begin{array}{rcl}1 &,& x\in S\\\ 0  &,& \mathrm{sonst}\end{array}\right.$
 
-$\chi_s(m) = $ \#f
+$\chi_s(m) = $ \#f\\
 $\chi_s(s) = $ \#t
 \begin{itemize}
 \item Idee: Repräsentative $S \subseteq M$ durch Prozedur (M $\rightarrow$ boolean) und Mengenoperation durch Operation auf Prozeduren (H.O.P.)
@@ -1196,13 +1194,9 @@ $\chi_s(s) = $ \#t
 \item :-) Mengenoperationen ($\cup , \cap , \backslash )$ in konstanter Zeit.
 \end{itemize}
 
-Element $x$ in Menge S einfügen
-
-%$\chi_{Su\lbrace x \rbrace}(y) =
- %\begin{cases}
-  % & \textbf{\# t }, \ x \in S \\
-   %& \textbf{\chi_{S}(y) } , \ sonst
-  %\end{cases}$
+Element $x$ in Menge S einfügen:\\
+(Sei 0 = \#f und 1 = \#t )\\
+$\chi_{S \lbrace x \rbrace}(y) =\left\{\begin{array}{rcl}1 &,& x\in S\\\chi_{S} (y)  &,& \mathrm{sonst}\end{array}\right.$
 
 
 \chapter{set-inset, Streams, delay, force 30.6.}
@@ -1258,7 +1252,7 @@ $\rightsquigarrow$ (fold empty-set set-in-set xs))
 \end{enumerate}
 
 
-\subsection{Steams (stream-of \%a)}
+\subsection{Streams (stream-of \%a)}
 Unendliche Ströme von Elementen $x_i$ mit Signaturen \%a. Ein Stream ist ein Paar.
 
 \begin{lstlisting}
