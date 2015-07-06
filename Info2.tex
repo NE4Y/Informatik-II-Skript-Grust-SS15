@@ -1309,7 +1309,70 @@ Verzögerte Auswertung eines Ausdrucks (delayed evaluation)\\
 
 \end{itemize}
 
+\chapter{Stream von fib - 2.7.}
+Generiere den unendlichen Strom fibs der Fibonacci-Zahlen\\
+f(0) = 1; fib(1) = 1; fib(n) = fib(n - 1) + fib(n - 2)\\
+(1, 1, 2, 3, 5, 8, 13, 21, ...)\\
 
+Beobachtung:
+
+\ \ \ 1 1* 2 3 5 8  Start des Streams fibs\\
++ 1* 2 3 5 8 tail von fibs\\
+= 2 3 5 8 tail von tail von fibs\\
+
+Stream-Diagramm zu fibs:
+
+yet-to-follow\\
+
+Die Menge der Binärbäume $T(M)$ ist induktiv definiert:
+\begin{enumerate}
+\item[($T_1$)] empty-tree $\in T(M)$
+\item[($T_2$)] $\forall x \in M$ und $l, r \in T(M)$: (make-node l x r) $\in T(M)$
+\item[($T_3$)] Nichts sonst ist in $T(M)$
+\end{enumerate}
+
+\subsection{Hinweis:}
+\begin{itemize}
+\item Jeder Knoten (make-node) in einem Binärbaum hat zwei Teilbäume sowie eine Markierung (label) x
+\item Vergleiche: $M*$ und $T(M)$, empty und empty-tree, make-pair und make-node
+\end{itemize}
+\subsection{Visualisierung}
+\begin{itemize} 
+\item empty-tree: $\square$\\
+ (make-node l x r): (Zeichnung yet-to-come)
+\item Der Knoten mit Markierung x ist Wurzel (root) des Baumes
+\item Ein Knoten, der nur leere Teilbäume besitzt heißt Blatt (leaf). Alle anderen Knoten sind innere Knoten (inner nodes) (Zeichnung yet-to-come)
+\end{itemize}
+
+
+\subsubsection{Beispiele für Binärbäume der Menge $T(M)$}
+Baum $t_1$ (listenartig, rets-tief):\\
+(Zeichnung)\\
+
+Baum $t_2$ (balanciert): alle Teilbäume auf einer Tiefe haben gleiche Anzahl von Knoten\\
+(Zeichnung)\\
+
+(Binär-) Bäume haben zahllose Anwendungen:
+\begin{itemize}
+\item Suchbäume (z.B. in Datenbanken)
+\item Datenkompression
+\item Darstellung von Termen (Ausdrücken)
+\end{itemize}
+Bäume sind die induktive Datenstruktur!\\
+Die Tiefe (depth) eines Baumes ist die maximale Länge eines Weges von der Wurzel zu einem leeren Baum. Also:\\
+(btree-depth empty tree) = 0\\
+(btree-depth t1) = 3\\
+(btree-depth t2) = 2\\
+
+\subsection{Schablone (gemischte Daten):}
+\begin{lstlisting}
+(: btree-depth ((btree-of %a) -> natural))
+(define btree-depth
+	(lambda (f)
+		(cond ((empty-tree? t) 0)
+			((node? t) (+ 1 (max (btree-depth (node-left-branch))
+   							(btree-depth (node-right-branch)))))))
+\end{lstlisting}
 
 
 

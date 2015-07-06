@@ -18,4 +18,7 @@
   <li>Induktive Definition - 11.06.2015</li>
   <li>Prozeduren höherer Ordnung - 16.06.2015</li>
   <li>Fortführung Prozeduren höherer Ordnung - 18.06.2015</li>
+  <li>Teachpack "universe" - 23.6. </li>
+  <li>Currying (Haskell B. Curry) - 25.6. </li>
+  <li>set-inset, Streams, delay, force - 30.6. </li>
 </ul>
