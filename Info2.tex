@@ -1346,7 +1346,7 @@ Die Menge der Binärbäume $T(M)$ ist induktiv definiert:
 
 
 \subsubsection{Beispiele für Binärbäume der Menge $T(M)$}
-Baum $t_1$ (listenartig, rechts-tief):\\
+Baum $t_1$ (listenartig, rechts-tief):
 \begin{lstlisting}
 ;   +--+                          
 ;   | 1| Wurzel                       
@@ -1374,11 +1374,11 @@ Baum $t_2$ (balanciert): alle Teilbäume auf einer Tiefe haben gleiche Anzahl vo
 \item Datenkompression
 \item Darstellung von Termen (Ausdrücken)
 \end{itemize}
-Bäume sind die induktive Datenstruktur!\\
+Bäume sind \textbf{die} induktive Datenstruktur!\\
 Die Tiefe (depth) eines Baumes ist die maximale Länge eines Weges von der Wurzel zu einem leeren Baum. Also:\\
 (btree-depth empty tree) = 0\\
 (btree-depth t1) = 3\\
-(btree-depth t2) = 2\\
+(btree-depth t2) = 2
 
 \subsection{Schablone (gemischte Daten):}
 \begin{lstlisting}
@@ -1431,13 +1431,13 @@ $= 2^{(0)} -1 \surd$\\
 Induktionsschrit: (P (l) $\land P (r) \Rightarrow P$ ((make-node l x r))\\
 (size (make-node l x r))\\
 $\rightsquigarrow$[size] (size l) + 1 + (size r)\\
-$≤$ [I.V.]$ 2^{(depth l)} - 1 + 1 + 2^{(depth r)} -1$\\
-$= 2^{(\textbf{depth l})} + 2^{(\textbf{depth r})} -1$\\
-$≤ 2$ x max($ 2^{\textbf{(depth l)}} + 2^{\textbf{(depth r)}}$) -1\\
-$= 2 \cdot 2^{\textbf{max((depth l), (depthr)}} -1$\\
-$= 2^{(1 + \textbf{max((depth l), (depth r))})}$\\
+$≤$ [I.V.] $2^{\textsl{(depth l)}} - 1 + 1 + 2^{\textsl{(depth r)}} -1$\\
+$= 2^{(\textsl{depth l})} + 2^{(\textsl{depth r})} -1$\\
+$≤ 2$ x max($ 2^{\textsl{(depth l)}} + 2^{\textsl{(depth r)}}$) -1\\
+$= 2 \cdot 2^{\textsl{max((depth l), (depthr)}} -1$\\
+$= 2^{(1 + \textsl{max((depth l), (depth r))})}$\\
 
-$\leftarrow$[depth] $2^{\textbf{depth((make-node l x r))}} -1 \surd$\\
+$\leftarrow$[depth] $2^{\textsl{depth((make-node l x r))}} -1 \surd$\\
 
 Wie müsste sich btree-fold, eine fold-Operation für Binärbäume verhalten? Tree transformer für Baum t:
 
