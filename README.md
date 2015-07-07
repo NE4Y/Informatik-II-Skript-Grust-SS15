@@ -22,5 +22,5 @@
   <li>Currying (Haskell B. Curry) - 25.6. </li>
   <li>set-inset, Streams, delay, force - 30.6. </li>
   <li>Fortsetzung Streams - 2.7. </li>
-  <li> - 7.7. </li>
+  <li>Fortsetzung Bäume - 7.7. </li>
 </ul>
