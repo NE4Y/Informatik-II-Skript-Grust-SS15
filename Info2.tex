@@ -14,8 +14,8 @@
 \usepackage{ulem}
 \usepackage[doublespacing]{setspace}
 \usepackage[procnames]{listings}
-\usepackage{color}
-
+%\usepackage{color}
+\usepackage[pdftex]{graphicx,color}
 \usepackage{textcomp}
 \usepackage{titlesec}
 \titleformat*{\section}{\large\bfseries}
@@ -1346,8 +1346,24 @@ Die Menge der Binärbäume $T(M)$ ist induktiv definiert:
 
 
 \subsubsection{Beispiele für Binärbäume der Menge $T(M)$}
-Baum $t_1$ (listenartig, rets-tief):\\
-(Zeichnung)\\
+Baum $t_1$ (listenartig, rechts-tief):\\
+\begin{lstlisting}
+;   +--+                          
+;   | 1| Wurzel                       
+;   +--+                            
+;   /     \                         
+; |_|     +--+                        
+;         |  |        innerer Knoten       
+;         +--+                  
+;         /     \                              
+;       |_|      .                           
+;                 \                             
+;                 +--+                 
+;                 |  |  Blatt               
+;                 +--+                       
+;                 /     \          
+;                |_|     |_| 
+\end{lstlisting}
 
 Baum $t_2$ (balanciert): alle Teilbäume auf einer Tiefe haben gleiche Anzahl von Knoten\\
 (Zeichnung)\\
@@ -1374,7 +1390,22 @@ Die Tiefe (depth) eines Baumes ist die maximale Länge eines Weges von der Wurze
    							(btree-depth (node-right-branch)))))))
 \end{lstlisting}
 
+\chapter{Fortsetzung Bäume - 7.7.}
+\section{Einschub: Pretty-Printing von Bäumen}
+Prozedur (pp t) erzeugt formatierten String für den Binärbaum t.\\
+
+\begin{figure}[ht]
+	\centering
+  \includegraphics[width=1\textwidth, angle=0]{pretty_printing.jpg}
+	\label{fig1}
+\end{figure}
 
 
+Idee: Repräsentiere formatierten String als Liste von Zeilen (Strings).\\
+\begin{enumerate}
+\item Nutze (string-append ...) um Zeilen-Strings zu definieren. (horizontale Konkatenation).\\
+\item Nutze (append ...) um die einzelnen Zeilen zu einer Liste von Zeilen zusammenzusetzen (vertikale Konkatenation).
+Erst direkt vor der Ausgabe werden die Zeilen-Strings zu einem auszugebenden String zusammengesetzt. (strings-list $\rightarrow$ string)
+\end{enumerate}
 
 \end{document}
