@@ -1408,4 +1408,59 @@ Idee: Repräsentiere formatierten String als Liste von Zeilen (Strings).\\
 Erst direkt vor der Ausgabe werden die Zeilen-Strings zu einem auszugebenden String zusammengesetzt. (strings-list $\rightarrow$ string)
 \end{enumerate}
 
+\section{Induktion über Binärbäume}
+Sei P(t) eine Eigenschaft von Binärbäumen $t \in T(M)$, also \\
+\begin{lstlisting}
+(: P ((btree-of M) -> boolean))
+\end{lstlisting}
+Falls P(empty-tree) [Induktionsbasis]\\
+und $\forall x \in M$, $l \in T(M), r \in T(M)$:\\
+$P(l) \land P(r) \Rightarrow P $ ((make-node l x r))\\
+dann $\forall t \in T(M): P(t)$
+
+\subsection{Beispiel:}
+Zusammenhang zwischen Grösse (btree-size) und Tiefe (btree-depth) eines Binärbaums t ("ein Baum der Tiefe n enthält mindestens n Knoten und höchstens $2^n - 1$ Knoten"):\\
+$P(t) \equiv $ (btree-depth t) $≤$ (btree-size t) $≤ 2^{\textbf{(btree-depth t)}} - 1$\\
+Erstes $≤$ trivial. Zweites:\\
+Induktionsbasis P(empty-tree):
+\begin{lstlisting}
+(size empty-tree)
+\end{lstlisting}
+*$\rightsquigarrow$[depth] 0\\
+$= 2^{(0)} -1 \surd$\\
+Induktionsschrit: (P (l) $\land P (r) \Rightarrow P$ ((make-node l x r))\\
+(size (make-node l x r))\\
+$\rightsquigarrow$[size] (size l) + 1 + (size r)\\
+$≤$ [I.V.]$ 2^{(depth l)} - 1 + 1 + 2^{(depth r)} -1$\\
+$= 2^{(\textbf{depth l})} + 2^{(\textbf{depth r})} -1$\\
+$≤ 2$ x max($ 2^{\textbf{(depth l)}} + 2^{\textbf{(depth r)}}$) -1\\
+$= 2 \cdot 2^{\textbf{max((depth l), (depthr)}} -1$\\
+$= 2^{(1 + \textbf{max((depth l), (depth r))})}$\\
+
+$\leftarrow$[depth] $2^{\textbf{depth((make-node l x r))}} -1 \surd$\\
+
+Wie müsste sich btree-fold, eine fold-Operation für Binärbäume verhalten? Tree transformer für Baum t:
+
+\begin{figure}[ht]
+	\centering
+  \includegraphics[width=1\textwidth, angle=0]{btree-fold.jpg}
+	\label{fig1}
+\end{figure}
+
+opku9zfswdefrtgzhujikolpölokijuzhtgrffgtzhujikolpkijuzhtgrftgzhujiklpö [Anmerkung Marvin]
+
+Falte Baum t bzgl. f und z:\\
+\begin{lstlisting}
+(: btree-fold (%a %b %a -> %a) (btree-of %b) -> %a))
+(define btree-fold
+	(lambda (z f t)
+		(cond ((empty? t) z)
+			((node? t) (f (btree-fold z f (node-left-branch t))
+					(node-label t)
+					(btree-fold z f (note-right-branch t))))))
+\end{lstlisting}
+
+
+
+
 \end{document}
