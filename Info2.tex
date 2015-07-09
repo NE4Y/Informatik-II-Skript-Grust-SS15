@@ -1461,6 +1461,81 @@ Falte Baum t bzgl. f und z:\\
 \end{lstlisting}
 
 
+\chapter{Fortsetzung Bäume (btree-fold) - 9.7.}
+Bestimme die Markierung Lm (left most) links-aussen im Baum t (oder empty, falls t leer ist).\\
+
+(leftmost (x) $\square$ ) = (list x)\\
+(leftmost (x) $\Delta$) = (leftmost $\Delta$)\\
+Hinweis:\\
+- Nutzt die leere Liste (empty) als Fehlerindikator (insbesondere kein Abbruch mit violation)\\
+(Prinzip: "Replacing Failure by a list of successes", Philip Wadler)\\
+\begin{lstlisting}
+(: leftmost ((btree-of %a) -> (list-of %a)))
+(check-expect (leftmost empty-tree) empty)
+(check-expect (leftost t1) (list 1))
+(check-expect (leftost t2) (list 2))
+
+(define leftmost
+	(lambda (t)
+		(btree-fold empty
+				(lambda (l1 x l2) (if (empty? l1)
+							(list x)
+							l1))
+				t)))
+\end{lstlisting}
+
+
+\textbf{Rechtstiefe Bäume und Listen sind isomorph (gleichgestaltig)}\\
+Beweis: $f \circ f^{-1} =$ id\\
+\begin{lstlisting}
+(list->btree (btree->list x))
+(right-deep? btree-fold ->  Tuete Gummibaerchen)
+\end{lstlisting}
+
+\section{Tiefendurchläufe (depth-first-traversals)}
+Ein Tiefendurchlauf (depth-first-traversal) eines Baumes t sammelt die Markierung jedes Knotens n in t auf. Die Markierungen, der Teilbäume L, r des Knotens n = (make-node L x r) werden vor x eingesammelt (Durchlauf zuerst in der Tiefe).\\
+Je nachdem, ob x  (a) zwischen, (b) vor, (c) nach den Markierungen von L,r eingeordnet wird, erhält man  ein \\
+(a) inorder traversal (xs1 x xs2)\\
+(b) preorder traversal (x xs1 xs2)\\
+ (c) postorder traversal (xs1 xs2 x).
+\begin{lstlisting}
+(: inorder ((btree-of %a) -> (list-of %a)))
+(define inorder
+	(lambda (t)
+		(btree-fold empty
+					(lambda (xs1 x xs2) (append xs1 (list x) xs2)))
+					t)))
+
+\end{lstlisting}
+Baumdarstellung eines arithmetischen Ausdrucks \\
+Ein Breitendurchlauf (breadth-firrst-traversal ) eines Baumes t sammelt die Markierungen der Knoten ebenenweise von der Wurzel ausgehend auf.\\
+
+\begin{figure}[ht]
+	\centering
+  \includegraphics[width=0.33\textwidth, angle=0]{btree-scheme.jpg}
+	\label{fig1}
+\end{figure}
+
+
+(levelorder t) $\rightsquigarrow$ (list "s" "c" "h" "e" "m" "e")\\
+Idee: Gegeben sei eine Liste ts von Bäumen.
+\begin{enumerate}
+\item Sammle die Liste der Markierungen der Wurzeln der (nicht-leeren) Bäume in ts auf (= (roots ts) )
+\item Bestimme ts' der nicht-leeren Teilbäume der Bäume in ts (= (subtrees ts))
+\item Führe (1) rekursiv auf ts' aus.
+\item Konkateniere die Listen aus  (1) und (3).
+\end{enumerate}
+
+zu Beginn: \\
+roots: "s"\\
+subtrees: ( (c), (h) )
+1. Rekursion: ( (c), (h) )\\
+roots: "c" "h"\\
+subtrees: ( (e) (m) (e) )\\
+2. Rekusion:  ( (e) (m) (e) )\\
+roots: "e" "m" "e"
+subtress: ( )
+
 
 
 \end{document}
