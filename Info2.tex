@@ -1536,6 +1536,67 @@ subtrees: ( (e) (m) (e) )\\
 roots: "e" "m" "e"
 subtress: ( )
 
+\chapter{Zeichencodierungen - 14.07}
+bilden Zeichen auf Sequenzen von Bits ab. Derzeit sind Codes \underline{fixer} Länge weit verbreitet.
+\begin{itemize}
+\item ASCII (Codes 0-127, 7 Bit, American Standard Code for Information Interchange)
+\item ISO-8859-1 (Codes 0-255, 8 Bit, 191 lateinische + Steuerzeichen)
+\item Unicode (20 Bit, codiert Zeichen 129 aktueller/historischer Sprachen, inklusive Klingon)\\
+Beispiel: Zeichen '€': 0000 0010 0000 1010 1100 ("$\backslash$020AC")
+\end{itemize}
+Huffman-Codes nutzen Bitsequenzen variabler Länge.\\
+Idee: Zeichen mit hoher Frequenz werden mit weniger Bits codiert, als seltene Zeichen.\\
+$\Rightarrow$ Datenkompression\\
+Huffman-Codes sind Binärbäume mit markierten Blättern (Knoten haben keine Codierung). \\
+Beispiel: Humman-Code für "erdbeermarmelade":
+\begin{lstlisting}
+              o
+             /   \
+            o      o
+           / \   /  \
+          r  o   o  e
+             /\ /\
+            m a b l 
+\end{lstlisting}
+Code für Zeichen x Pfad von Wurzel bis Blatt mit Markierung x.
+\begin{itemize}
+\item Abstieg in linken Teilbaum Bit 0
+\item Abstieg in rechten Teilbaum Bit 1
+\end{itemize}
 
+\begin{tabular}{|c|c|c|}
+\hline 
+Zeichen & Frequenz & Code \\ 
+\hline 
+e & 5 & 11 \\ 
+\hline 
+r & 3 & 00 \\ 
+\hline 
+m & 2 & 010 \\ 
+\hline 
+a & 2 & 011 \\ 
+\hline 
+d & 2 & 101 \\ 
+\hline 
+b & 1 & 1000 \\ 
+\hline 
+l & 1 & 1001 \\ 
+\hline 
+\end{tabular} \\
+\pagebreak
+
+Huffman-Codes sind präfixfrei.: alle Bits eines bestimmten Zeichens sind niemals Präfix eines anderen Zeichens $\Rightarrow$ eindeutige Decodierung.
+
+$11 | 00 | 101 | 1000 | 11 | 11 | ...  \Rightarrow$ e r d b e e ...\\
+Länge 42 Bit, Unicode 320 Bit\\
+Einsatz in JPEG, MP3, ZIP, ...\\
+
+\section{Prozeduren zur Huffman-Codierung}
+\begin{enumerate}
+\item Decodieren einer Bitsequenz (: huff-decode ((huff-tree-of string) (list-of bit) $\rightarrow$ string))
+\item Codieren eines Strings: (: huff-encode ((huff-tree-of string) string $\rightarrow$ (list-of bit)))\\
+$\forall$ string s: (huff-decode ht (huff-encode ht s)) = s
+\item Huffman-Tree für gegebenen Text erstellen: (: huffman-code (string $\rightarrow$ (huff-tree-of string))
+\end{enumerate}
 
 \end{document}
