@@ -1599,4 +1599,45 @@ $\forall$ string s: (huff-decode ht (huff-encode ht s)) = s
 \item Huffman-Tree für gegebenen Text erstellen: (: huffman-code (string $\rightarrow$ (huff-tree-of string))
 \end{enumerate}
 
+Decodieren eines huffman-codierten Strings (= Code von 0/1-Bits)\\
+Plan: Baue
+\begin{lstlisting}
+(: decode ( (huff-tree-of %a) (list-of bit) -> (list-of %a)))
+\end{lstlisting}
+\begin{enumerate}
+\item (decode ht $\square [... bits ...]$) = (make-pair x (decode ht ht [... bits ...])
+\item (decode ht $\Delta [ ]$) = empty
+\item[3.a)] (decode ht baum [0 bits ...]) = (decode ht linker-teilbaum [... bits ...])
+\item[3.b)] (decode ht baum [1 bits ...]) = (decode ht rechter-teilbaum [... bits ...])
+
+??? Neueinstieg an Wurzel des Huffman-Tree $\Rightarrow$ Wurzel des Huffman-Trees als Parameter durchführen.
+\end{enumerate}
+
+Huffman-Codierung eines Strings s als Liste von 0/1-Bits\\
+Plan:\\
+\begin{enumerate}
+\item[(a)] Codierung eines Zeichens c:
+Suche c mittels einer Tiefensuche von der Wurzel des Huffman-Tree aus. Protokolliere den Pfad beim Abstieg als Liste von 0/1-Bits.\\
+Frage: Wie reagieren, wenn die Tiefensuche zu einem Blatt $\ne$ c führt?\\
+Idee: Verfolge an innerem Knoten (make-huff-node l r) jeweils linken UND rechten Teilbaum. Suche nach c schlägt fehl in l oder in r. Bei Fehlschlag liefere die leere Bitliste. Beachte:\\
+(append empty xs) = xs\\
+(append xs empty) = xs\\
+
+
+\begin{lstlisting}
+(: encode ( (huff-tree-of %a) (list-of bit) %a -> (list-of bit)))
+				| 	|
+		bisheriges Protokoll    Zeichen c
+\end{lstlisting}
+
+\begin{enumerate}
+\item[1)] (encode $\square$x [... bits ...] c) = empty  ; x $\ne$ c
+\item[2)] (encode $\square$c [... bits ...] c) = (reverse  [... bits ...])
+\item[3)] (encode baum [... bits ...] c) = (append (encode l-baum [0 bits ...] c) (encode r-baum [1 bits ...] c)
+\end{enumerate}
+
+\item[(b)] Codiere Zeichen oder Strings s mit encode (map), verbinde die einzelnen Bit-Listen mit flatten (concat)
+
+\end{enumerate}
+
 \end{document}
