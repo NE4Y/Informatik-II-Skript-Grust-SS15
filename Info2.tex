@@ -1150,7 +1150,7 @@ curry $\uparrow$ $\downarrow$ uncurry										$=$
 \ \ \ \ \ \ \ partielle Applikation
 
 \begin{lstlisting}
-(: curry ((\%a \%b -> \%c) -> (\%a (\%b -> \%c))))
+(: curry ((%a %b -> %c) -> (%a (%b -> %c))))
 (define curry
 	(lambda (f)
 		(lambda (x)
@@ -1640,4 +1640,100 @@ Idee: Verfolge an innerem Knoten (make-huff-node l r) jeweils linken UND rechten
 
 \end{enumerate}
 
+\chapter{Fortsetzung Codierung mit Bäumen - 16.07}
+(huff-encode $\Delta$ht s) $\rightsquigarrow$ 0111 0100...\\
+(huff-decode $\Delta$ht 0111 0100...) $\rightsquigarrow$ s\\
+
+\section{Erstellung eines Huffman-Tree für einen gegebenen Text txt} 
+Plan:\\
+\begin{enumerate}
+\item[(H1)] Stelle Häufigkeit des Vorkommens jedes Zeichens in txt fest. Sortiere in Reihenfolge steigender Häufigkeit. (occurences)\\
+Beispiel (occurences "erdbeermarmelade") $\rightsquigarrow$ (list $<$"l",1$>$, $<$"b",1$>$, ... $<$"e",5$>$) Vorkommen $<$i,n$>$ (occur): Ding i (item) kommt mit Häufigkeit n (freq) vor.
+\item[(H2)] Baue Huffman-Tree von den Blättern her auf. Initialisiere den Aufbau für Vorkommen $<$i,n$>$ konstruiere $< \square i, n>$.
+\item[(H3)] Die beiden Huffman-Trees, die die seltensten Zeichen repräsentieren, stehen am Anfang der Liste.\\
+(list $< \square i, n>, <\square j,m>$...)\\
+Konstruktion des Huffman-Trees, die diese \underline{Invariante} bewahrt:\\
+Iteration: Wiederhole, bis Liste Länge 1 hat\\
+\begin{enumerate}
+\item[(a)] Fasse Vorkommen $< \Delta l, n>$ und $<\Delta r, m>$ zu einem Vorkommen: $< \Delta
+l$-O-$\Delta r, n+m>$
+\item[(b)] Sortiere dieses Vorkommen bzgl. Häufigkeit n + m in die Restliste ein.
+\end{enumerate}
+\item[(H4)] Baum ht in (list $< \Delta ht, n>$) ist der gesuchte Huffman-Tree.
+
+\end{enumerate}
+
+\chapter{DMdA-fortgeschritten - 16.7.}
+\begin{itemize}
+\item Neues Ausgabeformat in REPL:\\
+(list x1 ... xn) $\rightarrow$ (x1 ... xn)\\
+empty $\rightarrow$ ()
+\item Neuer (struktureller) Gleichheitstest für Werte aller (auch benutzer-definierter) Signaturen:\\
+\begin{lstlisting}
+(: equal? (%a %b -> boolean))
+\end{lstlisting}
+\end{itemize}
+
+\section{Quote}
+Sei e ein beliebiger Scheme-Ausdruck. Dann liefert (quote e) die Repräsentation von e - e wird \underline{nicht} ausgewertet.
+\subsection{Beispiele}
+(quote 42) $\rightsquigarrow$ 42\\
+(quote "U Tü") $\rightsquigarrow$ "U Tü"\\
+Konstante (Literale) repräsentieren sich selbst\\
+(quote ( + 40 2)) $\rightsquigarrow$ (+ 40 2) Funktionsapplikation repräsentiert als Liste\\
+Abkürzung (quote e) $\equiv$ 'e\\
+\subsection{Listennotation in Programmen:}
+(list x1 ... xn) $\equiv$ '(x1 .. xn)\\
+empty $\equiv$ '()\\
+\section{Symbole}
+Was ist (first '(* 1 2))? Was sind lambda, x, +, in '(lambda (x) (+ x 1))?\\
+$\rightarrow$ Neue Signatur \underline{symbol} zur Repräsentation von Namen in Programmen. Effiziente interne Darstellung (KEINE STRINGS), effizient vergleichbar. Kein Zugriff auf einzelne Zeichen des Symbols.
+
+\section{Operationen:}
+\begin{itemize}
+\item
+\begin{lstlisting}
+ (: symbol? (%a -> boolean)) 
+ \end{lstlisting}
+\end{itemize}
+\begin{itemize}
+\item
+\begin{lstlisting}
+(: symbol->string (symbol -> string))
+\end{lstlisting}
+\end{itemize}
+
+\section{Repräsentation und Auswertung arithmetischer Ausdrücke}
+\begin{lstlisting}
+		list
+\end{lstlisting}
+Beispiel: e$\equiv$ '$\overbrace{\textbf{(* (! (+ 1 2)) x)}}$
+
+\begin{lstlisting}
+(define arith
+	(signature (mixed number 	;Konstanten
+			  symbol 	;Variablen
+			  (list-of arith))) ; zusammengesetzte Ausdruecke
+\end{lstlisting}
+Auswertung möglich, wenn Bindung für Symbole (Variablen \underline{und} Operatoren) an Werte gegeben. \underline{Dictionary} (Environment):\\
+d1: $\lbrace$ x $\rightarrow$ 3,\\
+* $\rightarrow <$procedure: * $>$,\\
++ $\rightarrow <$procedure: + $>$,\\
+! $\rightarrow$ fac $\rbrace$\\
+$\Rightarrow$ e $\rightsquigarrow$ 18\\
+
+d2: $\lbrace$ x $\rightarrow$ 1,\\
+* $\rightarrow <$procedure: * $>$,\\
++ $\rightarrow <$procedure: + $>$,\\
+! $\rightarrow$ (lambda (x) (- x)) $\rbrace$\\
+$\Rightarrow$ e $\rightsquigarrow$ -3\\
+
+Auswertung eines arithmetischen Ausdrucks e (unter Dictionary d):\\
+ ((eval d) e)\\
+ konfigurierter Auswerter
+ \begin{enumerate}
+ \item[(E1)] ((eval d) c) = c ; c Konstante
+ \item[(E2)] ((eval $\lbrace x_1 \rightarrow v_1,$ ... , $x_n \rightarrow v_n \rbrace) x_i) = v_i$, ; Xi Variable
+ \item[(E3)] Cliffhanger
+ \end{enumerate}
 \end{document}
