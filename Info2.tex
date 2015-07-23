@@ -753,7 +753,7 @@ Konstruktionsanleitung befolgen!
 
 \end{lstlisting}
 
-Schablone (gemische + zusammengesetzte Daten)
+Schablone (gemischte + zusammengesetzte Daten)
 
 \begin{lstlisting}
 (define list-sum
@@ -798,13 +798,13 @@ Füge Listen xs, ys zusammen (concatenation):
 \underline{Beobachtung:}
 
 \begin{itemize}
-  \item Die Lnge von xs bestimmt die Anzahl der rekusriven Aufrufe von cat
+  \item Die Länge von xs bestimmt die Anzahl der rekursiven Aufrufe von cat
   \item Auf ys werden niemals Selektoren angewandt
 \end{itemize}
 
 \chapter{Rekursion auf Listen - 21.05.15}
 
-Generierung aller natürlichen Zahlen (vgl. gemische Daten). Eine natürliche Zahl (natuarl) ist entweder:
+Generierung aller natürlichen Zahlen (vgl. gemischte Daten). Eine natürliche Zahl (natural) ist entweder:
 
 \begin{itemize}
   \item die 0 (zero)
@@ -966,7 +966,7 @@ Konstruktive Definition der natürlichen Zahlen $\mathbb{N}$:
   Für jede Menge $M \subseteq \mathbb{N}$ mit $0 \in M$ und $\forall n: n \in M \Rightarrow succ(n) \in M$, gilt $M = \mathbb{N}$
   
   \begin{itemize}
-    \item $\mathbb{N}$ enhält nicht mehr als die durch 0 und die durch succ() generierten Elemente
+    \item $\mathbb{N}$ enthält nicht mehr als die durch 0 und die durch succ() generierten Elemente
     \item Nichts sonst ist in $\mathbb{N}$
   \end{itemize}
 \end{itemize}
@@ -1830,8 +1830,9 @@ Beispiel V:\\
 \item[($\rightarrow$ 2)] v [ x $\rightarrow$ a] = v
 \item[($\rightarrow$ 3)] ($e_1 e_2$) [ x $\rightarrow$ a] = ($e_1$ [x $\rightarrow$ a] $e_2$ [x $\rightarrow$ a])
 \item[($\rightarrow$ 4)] ($\lambda$ x . e) [x $\rightarrow$ a] = ($\lambda$ x . e)
-\item[($\rightarrow$ 5)] ($\lambda$ v . e) [x $\rightarrow$ a] = ($\lambda$ v . e [x $\rightarrow$ a]) wenn v nicht frei in a ist
-\item[($\rightarrow$ 6)]      ($\lambda$ z . e [v $\rightarrow$ z])[x $\rightarrow$ a] sonst (z : neuer Name)\\
+\item[($\rightarrow$ 5)] ($\lambda$ v . e) [x $\rightarrow$ a] =
+$ \left\{\begin{array}{cl} (\lambda \text{v . e [x } \rightarrow a]), & \mbox{wenn v nicht frei in a ist } \\ (\lambda \text{z . e [v }\rightarrow \text{ z])[x } \rightarrow \text{ a]}, & \mbox{ sonst (z : neuer Name, ($\rightarrow$ 6))} \end{array}\right. $
+
 \end{enumerate}
 
 \subsection{Beispiele: $\beta$-Reduktion}
