@@ -8,6 +8,7 @@
 \usepackage{enumitem}
 \usepackage{a4wide}
 \usepackage{geometry}
+\usepackage{amsmath, amssymb, amstext, amsfonts, mathrsfs}
 \usepackage[automark]{scrpage2}
 \pagestyle{scrheadings}
 \usepackage{amssymb}
@@ -1788,8 +1789,65 @@ free ((($\lambda$ x . ((f x) y)) z)) = $\lbrace$ f, y, z $\rbrace$ NACHRECHNEN\\
 bound ((($\lambda$ x . ((f x) y)) z)) = $\lbrace$ x $\rbrace$\\
 Achtung:\\
 Bindung/Freiheit muss für jedes Vorkommen separat entschieden werden.\\
-$E_2 \equiv$ (x1 ($\lambda$ x . x2))\\
-free ($E_2$) = $\lbrace$ x1 $\rbrace$\\
-bound ($E_2$) = $\lbrace$ x2 $\rbrace$
+$E_2 \equiv$ ($x_1$ ($\lambda$ x . $x_2$))\\
+free ($E_2$) = $\lbrace x_1 \rbrace$\\
+bound ($E_2$) = $\lbrace x_2 \rbrace$
+
+\chapter{$\lambda$-Kalkül Fortsetzung - 23.07}
+Die Anwendung einer Funktion (= $\lambda$-Abstraktion) auf ein Argument wird im $\lambda$-Kalkül durch $\beta$-Reduktion ($\overset{\rightarrow}{\beta} $) beschrieben. Die Applikation (($\lambda$ v . $e_1$) $e_2$) wird durchgeführt, indem 
+\begin{enumerate}
+\item eine Kopie von Rumpf $e_1$ hergestellt wird und
+\item alle \underline{freien} Vorkommen von v in $e_1$ durch $e_2$ ersetzt werden.
+\end{enumerate}
+Beispiel: \\
+(($\lambda$ x. ($*$ (($\lambda$ x. (+ x a)) b) x )) c)) [x ist gebunden]\\
+$\overset{\rightarrow}{\beta} $ (* (($\lambda$ x. (+ x a)) b) \textbf{c})\\
+$\overset{\rightarrow}{\beta} $ (*  (+ b a) c)\\
+Beispiel II:\\
+(($\lambda$ x . foo) bar)\\
+$\overset{\rightarrow}{\beta} $ foo\\
+Beispiel III:\\
+(($\lambda$ x . (($\lambda$ y. (* x y)) a)) b)\\
+$\overset{\rightarrow}{\beta} $ (($\lambda$ y. (* b y)) a)\\
+$\overset{\rightarrow}{\beta} $ (* b a)\\
+Beispiel IV:\\
+(($\lambda$ f . (f c)) ($\lambda$ x . (+ x a)))\\
+$\overset{\rightarrow}{\beta} $ (($\lambda$ x . (+ x a)) c)\\
+$\overset{\rightarrow}{\beta} $ (+ c a)\\
+Beispiel V:\\
+((($\lambda$ x . ($\lambda$ y . x)) ($\lambda$ z . y) foo) a)\\
+ $\lambda$ x ignoriert zweites Argument $\lambda$ z ignoriere Arg, liefert y\\
+ $\overset{\rightarrow}{\beta} $ ((($\lambda$ y . (($\lambda$ z . y)) foo) a) [y ist jetzt gebunden (Variable capturing)]\\
+ $\overset{\rightarrow}{\beta} $ (($\lambda$ z . foo) a)\\
+ $\overset{\rightarrow}{\beta} $ foo\\
+ Problem: freies y "wandert" unter das $\lambda$y und wird damit gebunden. :-(\\
+
+\section{Definition $\beta$-Reduktion}
+(($\lambda$ x . e) a)  $\overset{\rightarrow}{\beta} $ e [x $\rightarrow$ a]\\
+"ersetze freie Vorkommen von x in e durch a"\\
+\begin{enumerate}
+\item[($\rightarrow$ 1)] x [ x $\rightarrow$ a] = a
+\item[($\rightarrow$ 2)] v [ x $\rightarrow$ a] = v
+\item[($\rightarrow$ 3)] ($e_1 e_2$) [ x $\rightarrow$ a] = ($e_1$ [x $\rightarrow$ a] $e_2$ [x $\rightarrow$ a])
+\item[($\rightarrow$ 4)] ($\lambda$ x . e) [x $\rightarrow$ a] = ($\lambda$ x . e)
+\item[($\rightarrow$ 5)] ($\lambda$ v . e) [x $\rightarrow$ a] = ($\lambda$ v . e [x $\rightarrow$ a]) wenn v nicht frei in a ist
+\item[($\rightarrow$ 6)]      ($\lambda$ z . e [v $\rightarrow$ z])[x $\rightarrow$ a] sonst (z : neuer Name)\\
+\end{enumerate}
+
+\subsection{Beispiele: $\beta$-Reduktion}
+( \underline{(($\lambda$ x . ($\lambda$ y . x)) ($\lambda$ z . y)} foo) a) [Redex, Reductional Expression]\\
+$\overset{\rightarrow}{\beta} $ ((($\lambda$ y . x) [x $\rightarrow$ ($\lambda$ z . y)]  foo) a) \\
+($\rightarrow$ 6) (($\lambda$ y' . x[y $\rightarrow$ y']) [x $\rightarrow$ ($\lambda$ z . y)]  foo) a)\\
+($\rightarrow$ 2) (($\lambda$ y' . x) [x $\rightarrow$ ($\lambda$ z . y)]  foo) a)\\
+($\rightarrow$ 5) (($\lambda$ y' . x [x $\rightarrow$ ($\lambda$ z . y)])  foo) a)\\
+($\rightarrow$ 1) ( \underline{(($\lambda$ y' . ($\lambda$ z . y))  foo)} a)\\
+$\overset{\rightarrow}{\beta} $ (($\lambda$ z.y) [y' $\rightarrow$ foo] a)\\
+($\rightarrow$ 5) (($\lambda$ z.y [y' $\rightarrow$ foo] ) a)\\
+($\rightarrow$ 2) \underline{(($\lambda$ z.y) a)}\\
+$\overset{\rightarrow}{\beta} $ y[z $\rightarrow$ a]\\
+($\rightarrow$ 2) y\\
+
+
+THE END
 
 \end{document}
